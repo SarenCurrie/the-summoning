@@ -115,7 +115,18 @@ var nameReady = function(name) {
 			console.log('starting game');
 			console.log(data.room);
 
-			// insert game template here
+			// insert game template
+			$('#room').html(template('game', roomData));
+
+			console.log('sending drawCard message');
+			game.emit('drawCard');
 		});
+
+		game.on('cardDrawn', function (data) {
+			console.log('card drawn');
+			console.log(data);
+
+			$('.player-hand').append(template('card', data));
+		})
 	}
 };

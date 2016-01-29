@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var iconMapper = require('./util/iconMapper');
 var id = require('./util/idHandler');
-var buildings = require('./gamedata/buildings');
+var cards = require('./gamedata/cards');
 
 var createGame = function (io, room) {
 	console.log('creating namespace ' + room.roomName);

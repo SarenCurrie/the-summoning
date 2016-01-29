@@ -7,28 +7,28 @@
 			<li id="player_{{socketId @key}}">{{name}} {{#if turnDone}}<i class="fa fa-check"></i>{{/if}}</li>
 		{{/each}}
 	</ul>
-	<div class="game-options">
-		<div class="resources">
-			Resources
-			<ul id="resources_list">
-				{{#each resources}}
-					<li><i class="fa fa-{{icon}}"></i> <span id="{{@key}}_count">{{count}}</span></li>
-				{{/each}}
-			</ul>
-			Jobs (Available <span id="available_manPower_count">{{resources.manPower.count}}</span>)
-			<ul id="jobs_list">
-				{{#each jobs}}
-					<li>{{name}} (<i class="fa fa-{{icon}}"></i>) <input type="number" class="count assigned-count" id="{{@key}}_assigned_count" value=""/></li>
-				{{/each}}
-			</ul>
-			Build
-			<ul id="build_list">
-				<li><input type="radio" class="radio build-radio" name="build_radio" value="none" checked>None</li>
-				{{#each build}}
-					<li><input type="radio" class="radio build-radio" name="build_radio" id="{{@key}}_build_count" value="{{@key}}"/>{{name}} ( {{#each cost}}<i class="fa fa-{{icon}}"></i> {{count}} {{/each}})</li>
-				{{/each}}
-			</ul>
-			<button type="button" id="end_turn">End Turn</button>
+	<button id="end_turn">End Turn</button>
+	<div class="game-canvas">
+		<div class="ui-numbers">
+			<span class="key">Cards In Deck: </span>
+			<span class="value" id="player_cards_in_deck">0 </span>
+			<span class="key">Opp. Cards In Deck: </span>
+			<span class="value" id="opponent_cards_in_deck">0 </span>
+			<span class="key">Ritual Pieces: </span>
+			<span class="value" id="player_ritual_pieces">0 </span>
+			<span class="key">Opp. Ritual Pieces: </span>
+			<span class="value" id="opponent_ritual_pieces">0 </span>
+		</div>
+		<div class="board">
+			<div class="cards oponent-cards">
+				OPPOENT BOARD
+			</div>
+			<div class="cards player-cards">
+				PLAYER BOARD
+			</div>
+		</div>
+		<div class="hand palyer-hand">
+			PLAYER HAND
 		</div>
 	</div>
 </div>

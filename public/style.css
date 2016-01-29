@@ -1,0 +1,24 @@
+.key {
+	font-weight: bold;
+}
+
+.cards {
+	height: 250px;
+	width: 1050px;
+	margin: 20px;
+	border: 1px solid #B00B1E;
+}
+
+.hand {
+	height: 250px;
+	width: 1050px;
+	margin: 20px;
+	border: 1px solid #BADA55;
+}
+
+.log {
+	height: 300px;
+	width: 100%;
+	overflow-y: scroll;
+	border: 1px solid #10ADED;
+}
