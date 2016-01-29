@@ -1,0 +1,10 @@
+<div id="room">
+	<p>
+		Waiting for game in room: {{roomName}}.
+	</p>
+	<ul id="players">
+		{{#each players}}
+			<li id="player_{{socketId @key}}">{{name}} {{#if ready}}<i class="fa fa-check"></i>{{/if}}{{#equal (socketId @key) ../playerId}}<button id="ready_btn">Ready!</button>{{/equal}}</li>
+		{{/each}}
+	</ul>
+</div>
