@@ -61,6 +61,45 @@ module.exports = function (game) {
 					game.killCard(self);
 				}
 			}
+		},
+		bloodManos: {
+			name: 'Blood Manos',
+			mana: 1,
+			damage: 1,
+			health: 1,
+			description: 'ALL MINIONS.',
+			battleRattle: function (board, target) {
+				var self = this;
+
+				//
+			},
+			deathCry: function (board) {
+				var self = this;
+
+				//
+			},
+			startOfTurn: function (board) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (board) {
+				var self = this;
+
+				//
+			},
+			attack: function (board, target) {
+				var self = this;
+
+				target.health -= self.damage;
+				self.health -= target.damage;
+				if (target.health <= 0) {
+					game.killCard(target);
+				}
+				if (self.health <= 0) {
+					game.killCard(self);
+				}
+			}
 		}
 	};
 

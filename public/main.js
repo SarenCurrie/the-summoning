@@ -107,17 +107,22 @@ var nameReady = function(name) {
 		}
 	})
 
+	var turnNum;
+	var turnPlayer;
+
 	function joinGame(roomData) {
 		console.log('joining namespace ' + roomData.roomName);
 		var game = io('/' + roomData.roomName);
 
 		game.on('newTurn', function (data) {
-			console.log('starting game');
-			console.log(data.room);
+			turnNum = data.turnNum;
+			turnPlayer = data.turnPlayer;
 
-			if (data.turnPlayer === socket.id) {
+			if (turnPlayer === socket.id) {
 				console.log('It is this palyers turn!');
-				if(data.turnNum === 0) {
+				if(turnNum === 0) {
+					console.log('starting game');
+
 					// insert game template
 					$('#room').html(template('game', roomData));
 
@@ -130,7 +135,6 @@ var nameReady = function(name) {
 					game.emit('drawCard');
 				}
 				$('#end_turn').on('click', function () {
-					$('.card').off('click');
 					$('#end_turn').off('click');
 					game.emit('endTurn');
 				});
@@ -145,13 +149,31 @@ var nameReady = function(name) {
 
 			$('#' + data.id).on('click', function () {
 				console.log('clicked card');
-				game.emit('mulliganCard', data);
+				if (turnNum === 0 && turnPlayer === socket.id) {
+					console.log(data);
+					game.emit('mulliganCard', data);
+				} else if (turnPlayer === socket.id) {
+					game.emit('playCard', data);
+				}
 			});
 		});
 
 		game.on('cardMulliganed', function (data) {
 			$('#' + data.id).remove();
-		})
+		});
+
+		game.on('cardPlayed', function (data) {
+			console.log('cardPlayed');
+			console.log(data);
+			var $board;
+			if (data.player === socket.id) {
+				$('#' + data.id).remove();
+				$board = $('.player-board');
+			} else {
+				$board = $('.opponent-board');
+			}
+			$board.append(template('card', data));
+		});
 
 		game.on('joinedRoom', function (data) {
 			console.log(data.roomName);
