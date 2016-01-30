@@ -167,7 +167,7 @@ var createGame = function (io, room) {
 
 		socket.on('playCard', function (data) {
 
-			if (_.size(room.players[sId].board) >= 7) {
+			if (_.size(room.players[sId].board) > 7) {
 				return;
 			}
 

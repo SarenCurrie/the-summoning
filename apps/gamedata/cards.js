@@ -205,6 +205,8 @@ module.exports = function (game) {
 			mana: 1,
 			damage: 2,
 			health: 3,
+			attacks: 1,
+			type: 'minion',
 			description: 'Deathcry: Draw a card.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -239,6 +241,8 @@ module.exports = function (game) {
 			mana: 2,
 			damage: 4,
 			health: 4,
+			attacks: 1,
+			type: 'minion',
 			description: 'Battlerattle: Draw a card.\nBattlerattle: ' + this.name + ' deals 4 damage to a card.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -274,6 +278,8 @@ module.exports = function (game) {
 			mana: 2,
 			damage: 5,
 			health: 5,
+			attacks: 1,
+			type: 'minion',
 			description: 'Deathcry: Draw a card.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -308,6 +314,8 @@ module.exports = function (game) {
 			mana: 2,
 			damage: 5,
 			health: 3,
+			attacks: 1,
+			type: 'minion',
 			description: 'Battlerattle: ' + this.name + ' deals damage to a card equal to twice the number of cards you have on your board.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -389,6 +397,8 @@ module.exports = function (game) {
 			mana: 4,
 			damage: 0,
 			health: 12,
+			attacks: 1,
+			type: 'minion',
 			description: 'At the start of your turn, destroy all cards.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -430,6 +440,8 @@ module.exports = function (game) {
 			mana: 5,
 			damage: 8,
 			health: 8,
+			attacks: 1,
+			type: 'minion',
 			description: 'Battlerattle: Destroy target card.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -465,6 +477,8 @@ module.exports = function (game) {
 			mana: 5,
 			damage: 10,
 			health: 12,
+			attacks: 1,
+			type: 'minion',
 			description: 'Deathcry: Draw a card for each cards on your board. (Reminder: including this card.)',
 			battleRattle: function (room, target) {
 				var self = this;
