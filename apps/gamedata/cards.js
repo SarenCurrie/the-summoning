@@ -63,6 +63,86 @@ module.exports = function (game) {
 				}
 			}
 		},
+		player1: {
+			name: 'Player1',
+			mana: 1,
+			damage: 1,
+			health: 1,
+			attacks: 0,
+			description: 'THIS IS PLAYER ONE FAEC.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+			},
+			deathCry: function (board) {
+				var self = this;
+
+				//
+			},
+			startOfTurn: function (board) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (board) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				target.health -= self.damage;
+				self.health -= target.damage;
+				if (target.health <= 0) {
+					game.killCard(target);
+				}
+				if (self.health <= 0) {
+					game.killCard(self);
+				}
+			}
+		},
+		player2: {
+			name: 'Player2',
+			mana: 1,
+			damage: 1,
+			health: 1,
+			attacks: 0,
+			description: 'THIS IS PLAYER TWO FAEC.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+			},
+			deathCry: function (board) {
+				var self = this;
+
+				//
+			},
+			startOfTurn: function (board) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (board) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				target.health -= self.damage;
+				self.health -= target.damage;
+				if (target.health <= 0) {
+					game.killCard(target);
+				}
+				if (self.health <= 0) {
+					game.killCard(self);
+				}
+			}
+		},
 		bloodManos: {
 			name: 'Blood Manos',
 			mana: 1,
