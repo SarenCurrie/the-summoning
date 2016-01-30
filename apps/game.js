@@ -164,11 +164,10 @@ var createGame = function (io, room) {
 			console.log(data.id)
 			console.log(room.players[sId].mana)
 			for (var key in room.players[sId].cards) {
-			console.log('key is')
-			console.log(key)
-			console.log(room.players[sId].cards[key])
+				console.log('key is')
+				console.log(key)
+				console.log(room.players[sId].cards[key])
 			}
-			console.log('A')
 			console.log(room.players[sId].cards[data.id])
 			console.log(room.players[sId].cards[data.id].mana)
 			if (room.players[sId].mana >= room.players[sId].cards[data.id].mana) {
@@ -185,10 +184,10 @@ var createGame = function (io, room) {
 		socket.on('getFaces',  function() {
 			if (!facesRecieved){
 				facesRecieved = true;
-			for (var key in room.players) {
-			game.emit('cardPlayed', room.players[key].faces, 0);
+				for (var key in room.players) {
+					game.emit('cardPlayed', room.players[key].faces, 0);
+				}
 			}
-		}
 		});
 
 		socket.on('attack', function(attacker, victim) {
@@ -211,28 +210,27 @@ var createGame = function (io, room) {
 					return;
 				}
 				if (room.players[victim.player].board[victim.id].type == 'player'){
-				if (_.size(room.players[victim.player].board) > 1){
-					console.log("You must clear the board before going face!");
-					return;
-				} else {
-					room.players[sId].facedamage += room.players[sId].board[attacker.id].damage
-					while (room.players[sId].facedamage > 1){
-						room.players[sId].relics += 1
-						room.players[sId].facedamage -= 2
-						console.log('relic earned!')
-						game.emit('relicEarned', sId, room.players[sId].relics);
+					if (_.size(room.players[victim.player].board) > 1){
+						console.log("You must clear the board before going face!");
+						return;
+					} else {
+						room.players[sId].facedamage += room.players[sId].board[attacker.id].damage
+						while (room.players[sId].facedamage > 1){
+							room.players[sId].relics += 1
+							room.players[sId].facedamage -= 2
+							console.log('relic earned!')
+							game.emit('relicEarned', sId, room.players[sId].relics);
+						}
+						game.emit('faceDamageEarned', sId, room.players[sId].facedamage)
+						room.players[sId].board[attacker.id].attacks -= 1;
+						return;
 					}
-					game.emit('faceDamageEarned', sId, room.players[sId].facedamage)
-					room.players[sId].board[attacker.id].attacks -= 1;
-					return;
-				}
 				}
 
 				room.players[sId].board[attacker.id].attacks -= 1;
 				room.players[sId].board[attacker.id].attack(room, room.players[victim.player].board[victim.id]);
 			}
-
-		})
+		});
 	});
 
 	console.log('started');
@@ -244,33 +242,3 @@ var createGame = function (io, room) {
 }
 
 module.exports = createGame;
-
-/*
-
-var cardSet = cards({
-	killCard: function (card) {
-		console.log('Killing card: ' + card.name);
-	}
-});
-
-socket.on('drawCard', function () {
-	console.log('player ' + sId + ' draws');
-	var card = {};
-	_.extend(card, cardSet.dean, {player: sId});
-
-	players[sId].card = card;
-
-	socket.emit('cardDrawn', card);
-});
-
-socket.on('endTurn', function (data) {
-	var sId = id(socket.id);
-
-	room.players[sId].ready = true;
-
-	game.emit('turnReady', {
-		id: sId
-	});
-});
-
-*/
