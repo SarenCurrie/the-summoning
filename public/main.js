@@ -165,13 +165,13 @@ var nameReady = function(name) {
 			$('#' + data.id).remove();
 		});
 
-		game.on('cardPlayed', function (data) {
+		game.on('cardPlayed', function (data, mana) {
 			console.log('cardPlayed');
 			console.log(data);
 			var $board;
+      $('#mana').text(mana);
 			if (data.player === socket.id) {
 				$('#' + data.id).remove();
-        $('#mana').text(data.mana);
 				$board = $('.player-board');
 			} else {
 				$board = $('.opponent-board');
