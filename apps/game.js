@@ -17,20 +17,31 @@ var createGame = function (io, room) {
 
 		room.players[sId].ready = false;
 
-		var players = room.players;
-
-		socket.emit('joinedRoom', {
-			roomName: room.roomName
-		});
-
 		numPlayers++;
-		if (numPlayers === Object.keys(players).length) {
+		if (numPlayers === Object.keys(room.players).length) {
 			console.log('starting game');
 			game.emit('newTurn', {
 				room: room,
 				turnNum: 1
 			});
 		}
+
+		var cardSet = cards({
+			killCard: function (card) {
+				console.log('Killing card: ' + card.name);
+			}
+		});
+
+		socket.on('drawCard', function () {
+			console.log('player ' + sId + ' draws');
+
+			var card = {};
+			_.extend(card, cardSet.dean, {player: sId});
+
+			room.players[sId].card = card;
+
+			socket.emit('cardDrawn', card);
+		});
 
 		socket.on('endTurn', function (data) {
 			var sId = id(socket.id);
@@ -52,3 +63,33 @@ var createGame = function (io, room) {
 }
 
 module.exports = createGame;
+
+/*
+
+var cardSet = cards({
+	killCard: function (card) {
+		console.log('Killing card: ' + card.name);
+	}
+});
+
+socket.on('drawCard', function () {
+	console.log('player ' + sId + ' draws');
+	var card = {};
+	_.extend(card, cardSet.dean, {player: sId});
+
+	players[sId].card = card;
+
+	socket.emit('cardDrawn', card);
+});
+
+socket.on('endTurn', function (data) {
+	var sId = id(socket.id);
+
+	room.players[sId].ready = true;
+
+	game.emit('turnReady', {
+		id: sId
+	});
+});
+
+*/

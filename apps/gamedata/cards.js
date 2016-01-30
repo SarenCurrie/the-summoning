@@ -26,7 +26,7 @@ module.exports = function (game) {
 		dean: {
 			name: 'Dean',
 			mana: 1,
-			attack: 1,
+			damage: 1,
 			health: 1,
 			battleRattle: function (board, target) {
 				var self = this;
@@ -51,8 +51,8 @@ module.exports = function (game) {
 			attack: function (board, target) {
 				var self = this;
 
-				target.health -= self.attack;
-				self.health -= target.attack;
+				target.health -= self.damage;
+				self.health -= target.damage;
 				if (target.health <= 0) {
 					game.killCard(target);
 				}

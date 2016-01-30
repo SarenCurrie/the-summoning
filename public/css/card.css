@@ -1,0 +1,6 @@
+div.card {
+	display: inline-block;
+	height: 245px;
+	width: 145px;
+	border: 1px solid #10CC32;
+}

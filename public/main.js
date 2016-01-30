@@ -111,6 +111,14 @@ var nameReady = function(name) {
 		console.log('joining namespace ' + roomData.roomName);
 		var game = io('/' + roomData.roomName);
 
+		game.on('m1', function (data) {
+			console.log(data.message);
+		});
+
+		game.on('m2', function (data) {
+			console.log(data.message);
+		})
+
 		game.on('newTurn', function (data) {
 			console.log('starting game');
 			console.log(data.room);
@@ -127,6 +135,10 @@ var nameReady = function(name) {
 			console.log(data);
 
 			$('.player-hand').append(template('card', data));
-		})
+		});
+
+		game.on('joinedRoom', function (data) {
+			console.log(data.roomName);
+		});
 	}
 };
