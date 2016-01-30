@@ -22,54 +22,54 @@ var _ = require('underscore');
 // 	}
 // };
 
-function getCardsFromRoom(card, room) {
-	var opponentId;
-	var opponentCards;
-	var playerCards;
+module.exports = function (game) {
+	function getCardsFromRoom(card, room) {
+		var opponentId;
+		var opponentCards;
+		var playerCards;
 
-	for (var playerId in room.players) {
-		if (room.players.hasOwnProperty(playerId)) {
-			if (playerId !== card.player) {
-				opponentId = playerId;
-				break;
+		for (var playerId in room.players) {
+			if (room.players.hasOwnProperty(playerId)) {
+				if (playerId !== card.player) {
+					opponentId = playerId;
+					break;
+				}
 			}
 		}
+
+		playerCards = room.players[card.player].board;
+		opponentCards = room.players[opponentId].board;
+
+		return {
+			player: playerCards,
+			opponent: opponentCards
+		};
 	}
 
-	playerCards = room.players[card.player].board;
-	opponentCards = room.players[opponentId].board;
+	function damage(target, damage) {
 
-	return {
-		player: playerCards,
-		opponent: opponentCards
-	};
-}
+		target.health -= damage;
+		if (target.health <= 0) {
+			game.killCard(target);
+		}
 
-function damage(target, damage) {
-
-	target.health -= damage;
-	if (target.health <= 0) {
-		game.killCard(target);
 	}
 
-}
+	function simpleAttack (room, self, target) {
 
-function simpleAttack (room, self, target) {
+		damage(target, self.damage);
+		damage(self, target.damage);
 
-	damage(target, self.damage);
-	damage(self, target.damage);
+		// target.health -= self.damage;
+		// self.health -= target.damage;
+		// if (target.health <= 0) {
+		// 	game.killCard(target);
+		// }
+		// if (self.health <= 0) {
+		// 	game.killCard(self);
+		// }
+	}
 
-	// target.health -= self.damage;
-	// self.health -= target.damage;
-	// if (target.health <= 0) {
-	// 	game.killCard(target);
-	// }
-	// if (self.health <= 0) {
-	// 	game.killCard(self);
-	// }
-}
-
-module.exports = function (game) {
 	var cards = {
 		dean: {
 			name: 'Dean',
