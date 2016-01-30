@@ -25,6 +25,7 @@ var createGame = function (io, room) {
 		room.players[sId].relics = 0;
 		room.players[sId].facedamage = 0;
 		room.players[sId].faces = null;
+		room.players[sId].deck = [];
 
 		var cardSet = cards({
 			killCard: function (card) {
@@ -34,6 +35,37 @@ var createGame = function (io, room) {
 				game.emit('cardKilled', card);
 			}
 		});
+
+		console.log('Printing the deck!')
+		console.log(_.size(cardSet));
+		console.log(cardSet)
+		//this is kind of a patchy fix for players also being minions. TODO!
+		for (var i = 0; i < 30; i++){
+			while (true){
+				var num = Math.floor(Math.random() * (_.size(cardSet)));
+				var count = 0;
+				var cardFound = false;
+				for (var key in cardSet) {
+					if (count == num){
+					if (cardSet[key].type == 'player'){
+						break
+					}
+					var cardId = uuid.v4();
+					var card = {};
+					_.extend(card, cardSet[key], {player: sId, id: cardId});
+					room.players[sId].deck[i]  = card;
+					cardFound = true;
+				}
+				count += 1;
+				}
+				if (cardFound == true){
+					break
+				}
+			}
+		}
+		console.log('printing deck!')
+		console.log(room.players[sId].deck)
+		console.log(_.size(room.players[sId].deck))
 
 		if (!player1) {
 			player1 = sId;
@@ -91,15 +123,13 @@ var createGame = function (io, room) {
 
 		socket.on('drawCard', function () {
 			console.log('player ' + sId + ' draws');
-
-			var cardId = uuid.v4();
-
-			var card = {};
-			_.extend(card, cardSet.dean, {player: sId, id: cardId});
-
-			room.players[sId].cards[cardId] = card;
+			var card = room.players[sId].deck.shift();
+			console.log('deck size is');
+			console.log(_.size(room.players[sId].deck));
+			room.players[sId].cards[card.id] = card;
 
 			socket.emit('cardDrawn', card);
+			game.emit('updateSize', sId, _.size(room.players[sId].deck));
 		});
 
 		function refresh (nextPlayer) {
@@ -112,21 +142,35 @@ var createGame = function (io, room) {
 
 		socket.on('mulliganCard', function (data) {
 			console.log(sId + ' mulliganed ' + data.name);
+			while (true) {
+			var num = Math.floor(Math.random() * (_.size(room.players[sId].deck)));
+			if (room.players[sId].deck[num].type != 'player'){
+				break
+			}
+			}
+			var temp = room.players[sId].cards[data.id]
 			delete room.players[sId].cards[data.id];
 			socket.emit('cardMulliganed', data);
-			var cardId = uuid.v4();
-
-			var card = {};
-			_.extend(card, cardSet.dean, {player: sId, id: cardId});
-
-			room.players[sId].cards[cardId] = card;
-
+			var card = room.players[sId].deck[num]
+			room.players[sId].cards[card.id] = card;
+			room.players[sId].deck[num] = temp;
 			socket.emit('cardDrawn', card);
+			game.emit('updateSize', sId, _.size(room.players[sId].deck));
 		});
 
 		socket.on('playCard', function (data) {
 			console.log(sId + ' played ' + data.name);
-
+			console.log(data)
+			console.log(data.id)
+			console.log(room.players[sId].mana)
+			for (var key in room.players[sId].cards) {
+			console.log('key is')
+			console.log(key)
+			console.log(room.players[sId].cards[key])
+			}
+			console.log('A')
+			console.log(room.players[sId].cards[data.id])
+			console.log(room.players[sId].cards[data.id].mana)
 			if (room.players[sId].mana >= room.players[sId].cards[data.id].mana) {
 				room.players[sId].mana -= room.players[sId].cards[data.id].mana;
 				var mana = room.players[sId].mana;
@@ -163,7 +207,7 @@ var createGame = function (io, room) {
 				}
 				if (room.players[sId].board[attacker.id].type == 'player'){
 					console.log(room.players[sId].board[attacker.id].type)
-					console.log("Can't attack with your own face!");
+					console.log("Can't attack with your own face! How did you even gain attack?");
 					return;
 				}
 				if (room.players[victim.player].board[victim.id].type == 'player'){

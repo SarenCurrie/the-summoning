@@ -132,13 +132,13 @@ module.exports = function (game) {
 				//
 			}
 		},
-		bloodManos: {
-			name: 'Blood Manos',
-			mana: 1,
-			damage: 1,
-			health: 1,
+		bloodfenRaptor: {
+			name: 'Bloodfen Raptor',
+			mana: 2,
+			damage: 3,
+			health: 2,
 			type: 'minion',
-			description: 'ALL MINIONS.',
+			description: 'A worse version of Huge Toad.',
 			battleRattle: function (board, target) {
 				var self = this;
 

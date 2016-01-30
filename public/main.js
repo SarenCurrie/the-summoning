@@ -147,6 +147,15 @@ var nameReady = function(name) {
 			}
 		});
 
+    game.on('updateSize', function (sId, value) {
+      if (sId === socket.id) {
+        $('#player_cards_in_deck').text(value);
+      }
+      else {
+        $('#opponent_cards_in_deck').text(value);
+      }
+      });
+
 		game.on('cardDrawn', function (data) {
 			console.log('card drawn');
 			console.log(data);
@@ -169,7 +178,7 @@ var nameReady = function(name) {
 		});
 
     game.on('relicEarned', function (sId, value) {
-      if (turnPlayer === socket.id) {
+      if (sId === socket.id) {
         $('#player_ritual_pieces').text(value);
       }
       else {
@@ -178,7 +187,7 @@ var nameReady = function(name) {
       });
 
     game.on('faceDamageEarned', function (sId, value) {
-      if (turnPlayer === socket.id) {
+      if (sId === socket.id) {
         $('#player_face_damage').text(value);
       }
       else {
@@ -198,7 +207,7 @@ var nameReady = function(name) {
 				$board = $('.opponent-board');
 			}
 			$board.append(template('card', data));
-
+      if (data.type != 'player'){
       $('#' + data.id).on('click', function () {
         if (selected) {
           game.emit('attack', selected, data);
@@ -207,7 +216,7 @@ var nameReady = function(name) {
         else {
           selected = data;
         }
-      })
+      })}
 		});
 
     game.on('cardKilled', function (data) {
