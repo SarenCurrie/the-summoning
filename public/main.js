@@ -123,6 +123,9 @@ var nameReady = function(name) {
       $('#mana').text(data.mana);
 			if (turnPlayer === socket.id) {
 				console.log('It is this players turn!');
+        if(turnNum === 1){
+        game.emit('getFaces');
+        }
 				if(turnNum === 0) {
 					console.log('starting game');
 
@@ -133,7 +136,6 @@ var nameReady = function(name) {
 					game.emit('drawCard');
 					game.emit('drawCard');
 					game.emit('drawCard');
-          game.emit('getFace', turnPlayer);
 				}
 				else {
 					game.emit('drawCard');

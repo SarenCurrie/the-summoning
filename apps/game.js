@@ -8,7 +8,7 @@ var createGame = function (io, room) {
 	console.log('creating namespace ' + room.roomName);
 
 	var game = io.of(room.roomName);
-
+	var facesRecieved = false;
 	var turnNum = 0;
 	var player1;
 	var player2;
@@ -104,7 +104,7 @@ var createGame = function (io, room) {
 
 		function refresh (nextPlayer) {
 			console.log('refresh ' + nextPlayer);
-			console.log(room.players[nextPlayer]);
+			// console.log(room.players[nextPlayer]);
 			for (var key in room.players[nextPlayer].board) {
   		room.players[nextPlayer].board[key].attacks = 1;
 			}
@@ -138,8 +138,13 @@ var createGame = function (io, room) {
 			}
 		});
 
-		socket.on('getFace',  function(turnPlayer) {
-			game.emit('cardPlayed', room.players[turnPlayer].faces, 0);
+		socket.on('getFaces',  function() {
+			if (!facesRecieved){
+				facesRecieved = true;
+			for (var key in room.players) {
+			game.emit('cardPlayed', room.players[key].faces, 0);
+			}
+		}
 		});
 
 		socket.on('attack', function(attacker, victim) {
