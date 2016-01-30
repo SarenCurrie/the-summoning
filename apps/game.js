@@ -123,13 +123,20 @@ var createGame = function (io, room) {
 
 		socket.on('drawCard', function () {
 			console.log('player ' + sId + ' draws');
-			var card = room.players[sId].deck.shift();
-			console.log('deck size is');
-			console.log(_.size(room.players[sId].deck));
-			room.players[sId].cards[card.id] = card;
+			if (_.size(	room.players[sId].cards) < 10) {
+				var card = room.players[sId].deck.shift();
+				console.log('deck size is');
+				console.log(_.size(room.players[sId].deck));
+				room.players[sId].cards[card.id] = card;
 
-			socket.emit('cardDrawn', card);
-			game.emit('updateSize', sId, _.size(room.players[sId].deck));
+				socket.emit('cardDrawn', card);
+				game.emit('updateSize', sId, _.size(room.players[sId].deck));
+
+				socket.emit('cardDrawn', card);
+			}
+			else {
+				console.log('card "burnt"');
+			}
 		});
 
 		function refresh (nextPlayer) {
@@ -159,26 +166,21 @@ var createGame = function (io, room) {
 		});
 
 		socket.on('playCard', function (data) {
-			console.log(sId + ' played ' + data.name);
-			console.log(data)
-			console.log(data.id)
-			console.log(room.players[sId].mana)
-			for (var key in room.players[sId].cards) {
-				console.log('key is')
-				console.log(key)
-				console.log(room.players[sId].cards[key])
-			}
-			console.log(room.players[sId].cards[data.id])
-			console.log(room.players[sId].cards[data.id].mana)
-			if (room.players[sId].mana >= room.players[sId].cards[data.id].mana) {
-				room.players[sId].mana -= room.players[sId].cards[data.id].mana;
-				var mana = room.players[sId].mana;
 
-				room.players[sId].board[data.id] = room.players[sId].cards[data.id];
-				delete room.players[sId].cards[data.id];
-
-				game.emit('cardPlayed', data, mana);
+			if (_.size(room.players[sId].board) >= 7) {
+				return;
 			}
+
+			if (room.players[sId].mana < room.players[sId].cards[data.id].mana) {
+				return;
+			}
+
+			room.players[sId].mana -= room.players[sId].cards[data.id].mana;
+			var mana = room.players[sId].mana;
+			room.players[sId].board[data.id] = room.players[sId].cards[data.id];
+			delete room.players[sId].cards[data.id];
+
+			game.emit('cardPlayed', data, mana);
 		});
 
 		socket.on('getFaces',  function() {
