@@ -76,15 +76,19 @@ var createGame = function (io, room) {
 
 		socket.on('drawCard', function () {
 			console.log('player ' + sId + ' draws');
+			if (_.size(	room.players[sId].cards) < 10) {
+				var cardId = uuid.v4();
 
-			var cardId = uuid.v4();
+				var card = {};
+				_.extend(card, cardSet.dean, {player: sId, id: cardId});
 
-			var card = {};
-			_.extend(card, cardSet.dean, {player: sId, id: cardId});
+				room.players[sId].cards[cardId] = card;
 
-			room.players[sId].cards[cardId] = card;
-
-			socket.emit('cardDrawn', card);
+				socket.emit('cardDrawn', card);
+			}
+			else {
+				console.log('card "burnt"');
+			}
 		});
 
 		socket.on('mulliganCard', function (data) {
@@ -104,13 +108,18 @@ var createGame = function (io, room) {
 		socket.on('playCard', function (data) {
 			console.log(sId + ' played ' + data.name);
 
-			room.players[sId].mana -= room.players[sId].cards[data.id].mana;
-			data.mana = room.players[sId].mana;
+			if (_.size(room.players[sId].board) < 7){
+				room.players[sId].mana -= room.players[sId].cards[data.id].mana;
+				data.mana = room.players[sId].mana;
 
-			room.players[sId].board[data.id] = room.players[sId].cards[data.id];
-			delete room.players[sId].cards[data.id];
+				room.players[sId].board[data.id] = room.players[sId].cards[data.id];
+				delete room.players[sId].cards[data.id];
 
-			game.emit('cardPlayed', data);
+				game.emit('cardPlayed', data);
+			}
+			else {
+				console.log(sId + '\'s board is full!');
+			}
 		});
 
 		socket.on('attack', function(attacker, victim) {
