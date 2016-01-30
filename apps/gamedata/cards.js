@@ -71,7 +71,7 @@ module.exports = function (game) {
 			health: 1,
 			attacks: 0,
 			type: 'player',
-			description: 'THIS IS PLAYER ONE FAEC.',
+			description: 'THIS IS PLAYER ONE FACE.',
 			battleRattle: function (room, target) {
 				var self = this;
 
@@ -105,7 +105,7 @@ module.exports = function (game) {
 			health: 1,
 			attacks: 0,
 			type: 'player',
-			description: 'THIS IS PLAYER TWO FAEC.',
+			description: 'THIS IS PLAYER TWO FACE.',
 			battleRattle: function (room, target) {
 				var self = this;
 
