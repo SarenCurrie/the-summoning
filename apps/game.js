@@ -2,13 +2,16 @@ var _ = require('underscore');
 var iconMapper = require('./util/iconMapper');
 var id = require('./util/idHandler');
 var cards = require('./gamedata/cards');
+var uuid = require('node-uuid');
 
 var createGame = function (io, room) {
 	console.log('creating namespace ' + room.roomName);
 
 	var game = io.of(room.roomName);
 
-	var numPlayers = 0;
+	var turnNum = 0;
+	var player1;
+	var player2;
 
 	game.on('connection', function (socket) {
 		var sId = id(socket.id);
@@ -16,13 +19,18 @@ var createGame = function (io, room) {
 		console.log(sId + ' joined ' + room.roomName);
 
 		room.players[sId].ready = false;
+		room.players[sId].cards = {};
 
-		numPlayers++;
-		if (numPlayers === Object.keys(room.players).length) {
+		if (!player1) {
+			player1 = sId;
+		}
+		else {
+			player2 = sId;
 			console.log('starting game');
 			game.emit('newTurn', {
 				room: room,
-				turnNum: 1
+				turnPlayer: player1,
+				turnNum: turnNum
 			});
 		}
 
@@ -32,25 +40,46 @@ var createGame = function (io, room) {
 			}
 		});
 
-		socket.on('drawCard', function () {
-			console.log('player ' + sId + ' draws');
+		socket.on('endTurn', function () {
+			var sId = id(socket.id);
+			var nextPlayer = sId === player1 ? player2 : player1;
+
+			if (sId === player2) {
+				turnNum++;
+			}
+
+			console.log(nextPlayer + ' is starting turn ' + turnNum);
+
+			game.emit('newTurn', {
+				turnPlayer: nextPlayer,
+				turnNum: turnNum
+			});
+		});
+
+		socket.on('mulliganCard', function (data) {
+			delete room.players[sId].cards[data.id];
+			socket.emit('cardMulliganed', data);
+			var cardId = uuid.v4();
 
 			var card = {};
-			_.extend(card, cardSet.dean, {player: sId});
+			_.extend(card, cardSet.dean, {player: sId, id: cardId});
 
-			room.players[sId].card = card;
+			room.players[sId].cards[cardId] = card;
 
 			socket.emit('cardDrawn', card);
 		});
 
-		socket.on('endTurn', function (data) {
-			var sId = id(socket.id);
+		socket.on('drawCard', function () {
+			console.log('player ' + sId + ' draws');
 
-			room.players[sId].ready = true;
+			var cardId = uuid.v4();
 
-			game.emit('turnReady', {
-				id: sId
-			});
+			var card = {};
+			_.extend(card, cardSet.dean, {player: sId, id: cardId});
+
+			room.players[sId].cards[cardId] = card;
+
+			socket.emit('cardDrawn', card);
 		});
 	});
 
