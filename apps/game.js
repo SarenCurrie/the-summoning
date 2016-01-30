@@ -134,6 +134,10 @@ var createGame = function (io, room) {
 			console.log(attacker);
 			console.log(victim);
 			if (room.players[sId].board[attacker.id]) {
+				if (room.players[sId].board[victim.id]) {
+					console.log("Can't attack your own minions!");
+					return;
+				}
 				room.players[sId].board[attacker.id].attacks -= 1;
 				room.players[sId].board[attacker.id].attack(room, room.players[victim.player].board[victim.id]);
 			}
