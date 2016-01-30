@@ -29,6 +29,7 @@ module.exports = function (game) {
 			damage: 1,
 			health: 1,
 			attacks: 0,
+			type: 'minion',
 			description: 'Battlerattle: If dean is playing the game, he must give everyone chocolate.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -69,6 +70,7 @@ module.exports = function (game) {
 			damage: 1,
 			health: 1,
 			attacks: 0,
+			type: 'player',
 			description: 'THIS IS PLAYER ONE FAEC.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -93,14 +95,7 @@ module.exports = function (game) {
 			attack: function (room, target) {
 				var self = this;
 
-				target.health -= self.damage;
-				self.health -= target.damage;
-				if (target.health <= 0) {
-					game.killCard(target);
-				}
-				if (self.health <= 0) {
-					game.killCard(self);
-				}
+				//
 			}
 		},
 		player2: {
@@ -109,6 +104,7 @@ module.exports = function (game) {
 			damage: 1,
 			health: 1,
 			attacks: 0,
+			type: 'player',
 			description: 'THIS IS PLAYER TWO FAEC.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -133,14 +129,7 @@ module.exports = function (game) {
 			attack: function (room, target) {
 				var self = this;
 
-				target.health -= self.damage;
-				self.health -= target.damage;
-				if (target.health <= 0) {
-					game.killCard(target);
-				}
-				if (self.health <= 0) {
-					game.killCard(self);
-				}
+				//
 			}
 		},
 		bloodManos: {
@@ -148,6 +137,7 @@ module.exports = function (game) {
 			mana: 1,
 			damage: 1,
 			health: 1,
+			type: 'minion',
 			description: 'ALL MINIONS.',
 			battleRattle: function (board, target) {
 				var self = this;

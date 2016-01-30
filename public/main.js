@@ -133,6 +133,7 @@ var nameReady = function(name) {
 					game.emit('drawCard');
 					game.emit('drawCard');
 					game.emit('drawCard');
+          game.emit('getFace', turnPlayer);
 				}
 				else {
 					game.emit('drawCard');
@@ -164,6 +165,24 @@ var nameReady = function(name) {
 		game.on('cardMulliganed', function (data) {
 			$('#' + data.id).remove();
 		});
+
+    game.on('relicEarned', function (sId, value) {
+      if (turnPlayer === socket.id) {
+        $('#player_ritual_pieces').text(value);
+      }
+      else {
+        $('#opponent_ritual_pieces').text(value);
+      }
+      });
+
+    game.on('faceDamageEarned', function (sId, value) {
+      if (turnPlayer === socket.id) {
+        $('#player_face_damage').text(value);
+      }
+      else {
+        $('#opponent_face_damage').text(value);
+      }
+      });
 
 		game.on('cardPlayed', function (data, mana) {
 			console.log('cardPlayed');
