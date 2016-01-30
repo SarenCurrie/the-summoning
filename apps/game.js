@@ -56,6 +56,8 @@ var createGame = function (io, room) {
 
 			console.log(nextPlayer + ' is starting turn ' + turnNum);
 
+			refresh(nextPlayer)
+
 			game.emit('newTurn', {
 				turnPlayer: nextPlayer,
 				turnNum: turnNum,
@@ -87,6 +89,14 @@ var createGame = function (io, room) {
 			socket.emit('cardDrawn', card);
 		});
 
+		function refresh (nextPlayer) {
+			console.log('refresh ' + nextPlayer);
+			console.log(room.players[nextPlayer]);
+			for (var key in room.players[nextPlayer].board) {
+  		room.players[nextPlayer].board[key].attacks = 1;
+			}
+		}
+
 		socket.on('mulliganCard', function (data) {
 			console.log(sId + ' mulliganed ' + data.name);
 			delete room.players[sId].cards[data.id];
@@ -114,10 +124,15 @@ var createGame = function (io, room) {
 		});
 
 		socket.on('attack', function(attacker, victim) {
+			if (room.players[sId].board[attacker.id].attacks == 0) {
+				console.log("This minion can't attack!")
+				return;
+			}
 			console.log("attacking");
 			console.log(attacker);
 			console.log(victim);
 			if (room.players[sId].board[attacker.id]) {
+				room.players[sId].board[attacker.id].attacks -= 1;
 				room.players[sId].board[attacker.id].attack(room, room.players[victim.player].board[victim.id]);
 			}
 

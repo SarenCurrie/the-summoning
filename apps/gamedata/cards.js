@@ -28,6 +28,7 @@ module.exports = function (game) {
 			mana: 1,
 			damage: 1,
 			health: 1,
+			attacks: 0,
 			description: 'Battlerattle: If dean is playing the game, he must give everyone chocolate.',
 			battleRattle: function (room, target) {
 				var self = this;
