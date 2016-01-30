@@ -122,7 +122,7 @@ var nameReady = function(name) {
       console.log($('#mana'));
       $('#mana').text(data.mana);
 			if (turnPlayer === socket.id) {
-				console.log('It is this palyers turn!');
+				console.log('It is this players turn!');
 				if(turnNum === 0) {
 					console.log('starting game');
 
