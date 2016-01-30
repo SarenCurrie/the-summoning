@@ -52,14 +52,14 @@ var createGame = function (io, room) {
 			if (sId === player2) {
 				turnNum++;
 			}
-			room.players[player1].mana = turnNum;
+			room.players[nextPlayer].mana = turnNum;
 
 			console.log(nextPlayer + ' is starting turn ' + turnNum);
 
 			game.emit('newTurn', {
 				turnPlayer: nextPlayer,
 				turnNum: turnNum,
-				mana: room.players[player1].mana
+				mana: room.players[nextPlayer].mana
 			});
 		});
 
@@ -104,13 +104,15 @@ var createGame = function (io, room) {
 		socket.on('playCard', function (data) {
 			console.log(sId + ' played ' + data.name);
 
-			room.players[sId].mana -= room.players[sId].cards[data.id].mana;
-			data.mana = room.players[sId].mana;
+			if (room.players[sId].mana >= room.players[sId].cards[data.id].mana) {
+				room.players[sId].mana -= room.players[sId].cards[data.id].mana;
+				var mana = room.players[sId].mana;
 
-			room.players[sId].board[data.id] = room.players[sId].cards[data.id];
-			delete room.players[sId].cards[data.id];
+				room.players[sId].board[data.id] = room.players[sId].cards[data.id];
+				delete room.players[sId].cards[data.id];
 
-			game.emit('cardPlayed', data);
+				game.emit('cardPlayed', data, mana);
+			}
 		});
 
 		socket.on('attack', function(attacker, victim) {
