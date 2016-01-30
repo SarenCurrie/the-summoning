@@ -39,6 +39,9 @@ var createGame = function (io, room) {
 		var cardSet = cards({
 			killCard: function (card) {
 				console.log('Killing card: ' + card.name);
+
+				delete room.players[card.player].board[card.id];
+				game.emit('cardKilled', card);
 			}
 		});
 
@@ -49,12 +52,14 @@ var createGame = function (io, room) {
 			if (sId === player2) {
 				turnNum++;
 			}
+			room.players[player1].mana = turnNum;
 
 			console.log(nextPlayer + ' is starting turn ' + turnNum);
 
 			game.emit('newTurn', {
 				turnPlayer: nextPlayer,
-				turnNum: turnNum
+				turnNum: turnNum,
+				mana: room.players[player1].mana
 			});
 		});
 
@@ -98,11 +103,25 @@ var createGame = function (io, room) {
 
 		socket.on('playCard', function (data) {
 			console.log(sId + ' played ' + data.name);
+
+			room.players[sId].mana -= room.players[sId].cards[data.id].mana;
+			data.mana = room.players[sId].mana;
+
+			room.players[sId].board[data.id] = room.players[sId].cards[data.id];
 			delete room.players[sId].cards[data.id];
 
-			room.players[sId].board[data.id] = data;
 			game.emit('cardPlayed', data);
 		});
+
+		socket.on('attack', function(attacker, victim) {
+			console.log("attacking");
+			console.log(attacker);
+			console.log(victim);
+			if (room.players[sId].board[attacker.id]) {
+				room.players[sId].board[attacker.id].attack(room, room.players[victim.player].board[victim.id]);
+			}
+
+		})
 	});
 
 	console.log('started');

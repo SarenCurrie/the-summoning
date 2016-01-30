@@ -109,6 +109,7 @@ var nameReady = function(name) {
 
 	var turnNum;
 	var turnPlayer;
+  var selected;
 
 	function joinGame(roomData) {
 		console.log('joining namespace ' + roomData.roomName);
@@ -117,7 +118,9 @@ var nameReady = function(name) {
 		game.on('newTurn', function (data) {
 			turnNum = data.turnNum;
 			turnPlayer = data.turnPlayer;
-
+      console.log('starting new turn');
+      console.log($('#mana'));
+      $('#mana').text(data.mana);
 			if (turnPlayer === socket.id) {
 				console.log('It is this palyers turn!');
 				if(turnNum === 0) {
@@ -168,12 +171,28 @@ var nameReady = function(name) {
 			var $board;
 			if (data.player === socket.id) {
 				$('#' + data.id).remove();
+        $('#mana').text(data.mana);
 				$board = $('.player-board');
 			} else {
 				$board = $('.opponent-board');
 			}
 			$board.append(template('card', data));
+
+      $('#' + data.id).on('click', function () {
+        if (selected) {
+          game.emit('attack', selected, data);
+          selected = undefined;
+        }
+        else {
+          selected = data;
+        }
+      })
 		});
+
+    game.on('cardKilled', function (data) {
+      console.log('card died');
+      $('#' + data.id).remove();
+    })
 
 		game.on('joinedRoom', function (data) {
 			console.log(data.roomName);

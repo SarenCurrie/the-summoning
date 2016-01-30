@@ -29,7 +29,7 @@ module.exports = function (game) {
 			damage: 1,
 			health: 1,
 			description: 'Battlerattle: If dean is playing the game, he must give everyone chocolate.',
-			battleRattle: function (board, target) {
+			battleRattle: function (room, target) {
 				var self = this;
 
 				//
@@ -49,7 +49,7 @@ module.exports = function (game) {
 
 				//
 			},
-			attack: function (board, target) {
+			attack: function (room, target) {
 				var self = this;
 
 				target.health -= self.damage;
@@ -91,6 +91,7 @@ module.exports = function (game) {
 			attack: function (board, target) {
 				var self = this;
 
+				console.log('attack happened');
 				target.health -= self.damage;
 				self.health -= target.damage;
 				if (target.health <= 0) {
