@@ -176,8 +176,8 @@ module.exports = function (game) {
 				//
 			}
 		},
-		bloodfenRaptor: {
-			name: 'Bloodfen Raptor',
+		bloodyCopter: {
+			name: 'Bloody Copter',
 			image: 'imp.png',
 			mana: 2,
 			damage: 3,
@@ -205,8 +205,8 @@ module.exports = function (game) {
 				simpleAttack(room, self, target);
 			}
 		},
-		windriderEel: {
-			name: 'Windrider Eel',
+		wingriderDemon: {
+			name: 'Wingrider Demon',
 			image: 'DEMON.png',
 			mana: 1,
 			damage: 2,
@@ -242,15 +242,15 @@ module.exports = function (game) {
 				simpleAttack(room, self, target);
 			}
 		},
-		savageHunger: {
-			name: 'Savage Hunger',
+		doctorSix: {
+			name: 'Doctor Six',
 			image: 'dr6.png',
 			mana: 2,
 			damage: 4,
 			health: 4,
 			attacks: 0,
 			type: 'minion',
-			description: 'Battlerattle: Draw a card.\nBattlerattle: ' + this.name + ' deals 4 damage to a card.',
+			description: 'Doesn\'t have a real medical degree',
 			battleRattle: function (room, target) {
 				var self = this;
 
@@ -280,8 +280,8 @@ module.exports = function (game) {
 				simpleAttack(room, self, target);
 			}
 		},
-		tomeScour: {
-			name: 'Tome Scour',
+		homeShower: {
+			name: 'Home Scout',
 			image: 'fighter.png',
 			mana: 2,
 			damage: 5,
@@ -317,8 +317,8 @@ module.exports = function (game) {
 				simpleAttack(room, self, target);
 			}
 		},
-		umaraRaptor: {
-			name: 'Umara Raptor',
+		kumaraCopter: {
+			name: 'Kumara Copter',
 			image: 'knightgirl.png',
 			mana: 2,
 			damage: 5,
@@ -401,8 +401,8 @@ module.exports = function (game) {
 		// 	}
 		//
 		// }
-		zephyrSprite: {
-			name: 'Zephyr Sprite',
+		roboSprite: {
+			name: 'Robo Sprite',
 			image: 'robo.png',
 			mana: 4,
 			damage: 0,
@@ -445,8 +445,8 @@ module.exports = function (game) {
 			}
 
 		},
-		seismicStrike: {
-			name: 'Seismic Strike',
+		seismicStriker: {
+			name: 'Seismic Striker',
 			mana: 5,
 			damage: 8,
 			health: 8,
@@ -482,8 +482,8 @@ module.exports = function (game) {
 			}
 
 		},
-		tidehollowStrix: {
-			name: 'Tidehollow Strix',
+		deadRinger: {
+			name: 'Dead Ringer',
 			mana: 5,
 			damage: 10,
 			health: 12,

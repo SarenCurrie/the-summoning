@@ -166,7 +166,7 @@ var nameReady = function(name) {
 			console.log(data);
 
 			if (!data.image) {
-				data.image = 'nicolas-cage.jpg'
+				data.image = 'DEMON.png'
 			}
 
 			$('.player-hand').append(template('card', data));
@@ -235,7 +235,7 @@ var nameReady = function(name) {
 				$board = $('.opponent-board');
 			}
 			if (!data.image) {
-				data.image = 'nicolas-cage.jpg'
+				data.image = 'dr6.png'
 			}
 			$board.append(template('card', data));
 
