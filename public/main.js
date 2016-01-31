@@ -165,6 +165,8 @@ var nameReady = function(name) {
 			console.log('card drawn');
 			console.log(data);
 
+			data.iamge = data.image || 'nicolas-cage.jpg';
+
 			$('.player-hand').append(template('card', data));
 
 			$('#' + data.id).on('click', function () {
