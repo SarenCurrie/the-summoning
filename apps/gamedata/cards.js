@@ -176,6 +176,7 @@ module.exports = function (game) {
 		},
 		bloodfenRaptor: {
 			name: 'Bloodfen Raptor',
+			image: 'imp.png',
 			mana: 2,
 			damage: 3,
 			health: 2,
@@ -201,8 +202,10 @@ module.exports = function (game) {
 
 				simpleAttack(room, self, target);
 			}
-		},windriderEel: {
+		},
+		windriderEel: {
 			name: 'Windrider Eel',
+			image: 'DEMON.png',
 			mana: 1,
 			damage: 2,
 			health: 3,
@@ -239,6 +242,7 @@ module.exports = function (game) {
 		},
 		savageHunger: {
 			name: 'Savage Hunger',
+			image: 'dr6.png',
 			mana: 2,
 			damage: 4,
 			health: 4,
@@ -276,6 +280,7 @@ module.exports = function (game) {
 		},
 		tomeScour: {
 			name: 'Tome Scour',
+			image: 'fighter.png',
 			mana: 2,
 			damage: 5,
 			health: 5,
@@ -312,6 +317,7 @@ module.exports = function (game) {
 		},
 		umaraRaptor: {
 			name: 'Umara Raptor',
+			image: 'knightgirl.png',
 			mana: 2,
 			damage: 5,
 			health: 3,
@@ -395,6 +401,7 @@ module.exports = function (game) {
 		// }
 		zephyrSprite: {
 			name: 'Zephyr Sprite',
+			image: 'robo.png',
 			mana: 4,
 			damage: 0,
 			health: 12,
@@ -489,7 +496,7 @@ module.exports = function (game) {
 			deathCry: function (room) {
 				var self = this;
 
-				for (var playerCard in getCardsFromRoom.player) {
+				for (var playerCard in getCardsFromRoom().player) {
 					game.draw(self.player);
 				}
 				//
