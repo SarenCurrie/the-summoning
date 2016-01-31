@@ -1,7 +1,7 @@
 Number.isInteger = Number.isInteger || function(value) {
-  return typeof value === "number" &&
-    isFinite(value) &&
-    Math.floor(value) === value;
+	return typeof value === "number" &&
+		isFinite(value) &&
+		Math.floor(value) === value;
 };
 
 $(function () {
@@ -105,11 +105,16 @@ var nameReady = function(name) {
 		if (data.roomName === currentRoom) {
 			joinGame(data);
 		}
-	})
+	});
 
 	var turnNum;
 	var turnPlayer;
-  var selected;
+	var selected;
+
+	var cardDoingBattleRattle;
+
+	// Normal, InBattleRattle, InAttack
+	var cardActionState = 'Normal';
 
 	function joinGame(roomData) {
 		console.log('joining namespace ' + roomData.roomName);
@@ -160,15 +165,27 @@ var nameReady = function(name) {
 			console.log('card drawn');
 			console.log(data);
 
+			data.iamge = data.image || 'nicolas-cage.jpg';
+
 			$('.player-hand').append(template('card', data));
 
 			$('#' + data.id).on('click', function () {
 				console.log('clicked card');
-				if (turnNum === 0 && turnPlayer === socket.id) {
-					console.log(data);
-					game.emit('mulliganCard', data);
-				} else if (turnPlayer === socket.id) {
-					game.emit('playCard', data);
+				if (cardActionState === 'Normal') {
+					if (turnPlayer === socket.id) {
+						if (turnNum === 0) {
+							console.log(data);
+							game.emit('mulliganCard', data);
+						} else {
+							if (data.battleRattleTarget) {
+								cardActionState = 'InBattleRattle';
+								cardDoingBattleRattle = data;
+							}
+							else {
+								game.emit('playCard', data);
+							}
+						}
+					}
 				}
 			});
 		});
@@ -216,25 +233,40 @@ var nameReady = function(name) {
 				$board = $('.opponent-board');
 			}
 			$board.append(template('card', data));
-			if (data.type != 'player'){
+
+			if (data.type == 'player') {
 				$('#' + data.id).on('click', function () {
-					if (selected) {
+					if (cardActionState == 'InAttack') {
 						game.emit('attack', selected, data);
 						selected = undefined;
+						cardActionState = 'Normal';
 					}
-					else {
+				});
+			}
+			else {
+				$('#' + data.id).on('click', function () {
+					if (cardActionState == 'Normal') {
 						selected = data;
+						cardActionState = 'InAttack';
+					} else if (cardActionState == 'InBattleRattle') {
+						game.emit('playCard', cardDoingBattleRattle, data);
+						cardActionState = 'Normal';
+					} else if (cardActionState == 'InAttack') {
+						game.emit('attack', selected, data);
+						selected = undefined;
+						cardActionState = 'Normal';
 					}
-				})}
-			});
+				});
+			}
+		});
 
-			game.on('cardKilled', function (data) {
-				console.log('card died');
-				$('#' + data.id).remove();
-			})
+		game.on('cardKilled', function (data) {
+			console.log('card died');
+			$('#' + data.id).remove();
+		});
 
 		game.on('joinedRoom', function (data) {
 			console.log(data.roomName);
 		});
 	}
-};
+}
