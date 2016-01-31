@@ -222,7 +222,17 @@ var nameReady = function(name) {
 				$board = $('.opponent-board');
 			}
 			$board.append(template('card', data));
-			if (data.type != 'player') {
+
+			if (data.type == 'player') {
+				$('#' + data.id).on('click', function () {
+					if (cardActionState == 'InAttack') {
+						game.emit('attack', selected, data);
+						selected = undefined;
+						cardActionState = 'Normal';
+					}
+				});
+			}
+			else {
 				$('#' + data.id).on('click', function () {
 					if (cardActionState == 'Normal') {
 						selected = data;
