@@ -102,6 +102,7 @@ module.exports = function (game) {
 			attack: function (room, target) {
 				var self = this;
 
+				game.summonCard(self, self);
 				simpleAttack(room, self, target);
 			}
 		},

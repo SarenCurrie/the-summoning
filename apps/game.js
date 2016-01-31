@@ -29,6 +29,19 @@ var createGame = function (io, room) {
 		room.players[sId].mullcards = [];
 
 		var cardSet = cards({
+			summonCard: function (summoner, summonee) {
+				console.log('summoning...');
+
+				var pId = summoner.player;
+				var cardId = uuid.v4();
+				var card = {};
+
+				_.extend(card, summonee, {player: pId, id: cardId});
+
+				room.players[pId].board[cardId] = card;
+
+				game.emit('cardPlayed', card, 0);
+			},
 			killCard: function (card) {
 				console.log('Killing card: ' + card.name);
 
@@ -37,9 +50,9 @@ var createGame = function (io, room) {
 			}
 		});
 
-		console.log('Printing the deck!')
-		console.log(_.size(cardSet));
-		console.log(cardSet)
+		// console.log('Printing the deck!')
+		// console.log(_.size(cardSet));
+		// console.log(cardSet)
 		//this is kind of a patchy fix for players also being minions. TODO!
 		for (var i = 0; i < 30; i++){
 			while (true){
