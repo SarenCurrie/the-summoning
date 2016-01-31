@@ -124,7 +124,7 @@ var nameReady = function(name) {
 			turnNum = data.turnNum;
 			turnPlayer = data.turnPlayer;
 			console.log('starting new turn');
-			console.log($('#mana'));
+			console.log(data.mana);
 			$('#mana').text(data.mana);
 			if (turnPlayer === socket.id) {
 				console.log('It is this players turn!');

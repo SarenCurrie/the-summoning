@@ -26,6 +26,7 @@ var createGame = function (io, room) {
 		room.players[sId].facedamage = 0;
 		room.players[sId].faces = null;
 		room.players[sId].deck = [];
+		room.players[sId].mullcards = [];
 
 		var cardSet = cards({
 			killCard: function (card) {
@@ -59,6 +60,9 @@ var createGame = function (io, room) {
 				count += 1;
 				}
 				if (cardFound == true){
+					if (i < 3){
+						room.players[sId].mullcards[i] = room.players[sId].deck[i].id
+					}
 					break
 				}
 			}
@@ -146,6 +150,7 @@ var createGame = function (io, room) {
 		}
 
 		socket.on('mulliganCard', function (data) {
+			if (_.contains(room.players[sId].mullcards,data.id)){
 			console.log(sId + ' mulliganed ' + data.name);
 			console.log(room.players[sId].deck);
 			while (true) {
@@ -163,6 +168,9 @@ var createGame = function (io, room) {
 			socket.emit('cardMulliganed', data);
 			socket.emit('cardDrawn', card);
 			game.emit('updateSize', sId, _.size(room.players[sId].deck));
+		} else {
+			console.log('Can\'t mulligan a card you just recieved');
+		}
 		});
 
 		socket.on('playCard', function (data) {
@@ -193,15 +201,15 @@ var createGame = function (io, room) {
 		});
 
 		socket.on('attack', function(attacker, victim) {
-			if (room.players[sId].board[attacker.id].attacks == 0) {
-				console.log("This minion can't attack!")
-				return;
-			}
 			console.log("attacking");
 			console.log(attacker);
 			console.log("victim");
 			console.log(victim);
 			if (room.players[sId].board[attacker.id]) {
+				if (room.players[sId].board[attacker.id].attacks == 0) {
+					console.log("This minion can't attack!")
+					return;
+				}
 				if (room.players[sId].board[victim.id]) {
 					console.log("Can't attack your own minions!");
 					return;
@@ -231,6 +239,8 @@ var createGame = function (io, room) {
 
 				room.players[sId].board[attacker.id].attacks -= 1;
 				room.players[sId].board[attacker.id].attack(room, room.players[victim.player].board[victim.id]);
+			} else {
+				console.log("This minion doesn't belong to you!");
 			}
 		});
 	});
