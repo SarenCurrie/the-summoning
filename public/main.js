@@ -165,7 +165,9 @@ var nameReady = function(name) {
 			console.log('card drawn');
 			console.log(data);
 
-			data.iamge = data.image || 'nicolas-cage.jpg';
+			if (!data.image) {
+				data.image = 'nicolas-cage.jpg'
+			}
 
 			$('.player-hand').append(template('card', data));
 
@@ -231,6 +233,9 @@ var nameReady = function(name) {
 				$board = $('.player-board');
 			} else {
 				$board = $('.opponent-board');
+			}
+			if (!data.image) {
+				data.image = 'nicolas-cage.jpg'
 			}
 			$board.append(template('card', data));
 

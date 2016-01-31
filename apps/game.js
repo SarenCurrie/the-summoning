@@ -215,9 +215,9 @@ var createGame = function (io, room) {
 		});
 
 		socket.on('attack', function(attacker, victim) {
-			console.log("attacking");
+			console.log('attacking');
 			console.log(attacker);
-			console.log("victim");
+			console.log('victim');
 			console.log(victim);
 			if (room.players[sId].board[attacker.id]) {
 				if (room.players[sId].board[attacker.id].attacks == 0) {
