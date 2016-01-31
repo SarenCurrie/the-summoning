@@ -76,6 +76,8 @@ module.exports = function (game) {
 			mana: 1,
 			damage: 1,
 			health: 1,
+			attacks: 0,
+			type: 'minion',
 			description: 'Battlerattle: If dean is playing the game, he must give everyone chocolate.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -103,11 +105,108 @@ module.exports = function (game) {
 				simpleAttack(room, self, target);
 			}
 		},
-		windriderEel: {
+		player1: {
+			name: 'Player1',
+			mana: 1,
+			damage: 1,
+			health: 1,
+			attacks: 0,
+			type: 'player',
+			description: 'THIS IS PLAYER ONE FACE.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+			},
+			deathCry: function (board) {
+				var self = this;
+
+				//
+			},
+			startOfTurn: function (board) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (board) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				//
+			}
+		},
+		player2: {
+			name: 'Player2',
+			mana: 1,
+			damage: 1,
+			health: 1,
+			attacks: 0,
+			type: 'player',
+			description: 'THIS IS PLAYER TWO FACE.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+			},
+			deathCry: function (board) {
+				var self = this;
+
+				//
+			},
+			startOfTurn: function (board) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (board) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				//
+			}
+		},
+		bloodfenRaptor: {
+			name: 'Bloodfen Raptor',
+			mana: 2,
+			damage: 3,
+			health: 2,
+			type: 'minion',
+			description: 'A worse version of Huge Toad.',
+			battleRattle: function (board, target) {
+				var self = this;
+
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			}
+		},windriderEel: {
 			name: 'Windrider Eel',
 			mana: 1,
 			damage: 2,
 			health: 3,
+			attacks: 1,
+			type: 'minion',
 			description: 'Deathcry: Draw a card.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -142,6 +241,8 @@ module.exports = function (game) {
 			mana: 2,
 			damage: 4,
 			health: 4,
+			attacks: 1,
+			type: 'minion',
 			description: 'Battlerattle: Draw a card.\nBattlerattle: ' + this.name + ' deals 4 damage to a card.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -177,6 +278,8 @@ module.exports = function (game) {
 			mana: 2,
 			damage: 5,
 			health: 5,
+			attacks: 1,
+			type: 'minion',
 			description: 'Deathcry: Draw a card.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -211,6 +314,8 @@ module.exports = function (game) {
 			mana: 2,
 			damage: 5,
 			health: 3,
+			attacks: 1,
+			type: 'minion',
 			description: 'Battlerattle: ' + this.name + ' deals damage to a card equal to twice the number of cards you have on your board.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -292,6 +397,8 @@ module.exports = function (game) {
 			mana: 4,
 			damage: 0,
 			health: 12,
+			attacks: 1,
+			type: 'minion',
 			description: 'At the start of your turn, destroy all cards.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -333,6 +440,8 @@ module.exports = function (game) {
 			mana: 5,
 			damage: 8,
 			health: 8,
+			attacks: 1,
+			type: 'minion',
 			description: 'Battlerattle: Destroy target card.',
 			battleRattle: function (room, target) {
 				var self = this;
@@ -368,6 +477,8 @@ module.exports = function (game) {
 			mana: 5,
 			damage: 10,
 			health: 12,
+			attacks: 1,
+			type: 'minion',
 			description: 'Deathcry: Draw a card for each cards on your board. (Reminder: including this card.)',
 			battleRattle: function (room, target) {
 				var self = this;

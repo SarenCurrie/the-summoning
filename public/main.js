@@ -118,11 +118,14 @@ var nameReady = function(name) {
 		game.on('newTurn', function (data) {
 			turnNum = data.turnNum;
 			turnPlayer = data.turnPlayer;
-      console.log('starting new turn');
-      console.log($('#mana'));
-      $('#mana').text(data.mana);
+			console.log('starting new turn');
+			console.log($('#mana'));
+			$('#mana').text(data.mana);
 			if (turnPlayer === socket.id) {
-				console.log('It is this palyers turn!');
+				console.log('It is this players turn!');
+				if(turnNum === 1){
+					game.emit('getFaces');
+				}
 				if(turnNum === 0) {
 					console.log('starting game');
 
@@ -141,6 +144,15 @@ var nameReady = function(name) {
 					$('#end_turn').off('click');
 					game.emit('endTurn');
 				});
+			}
+		});
+
+		game.on('updateSize', function (sId, value) {
+			if (sId === socket.id) {
+				$('#player_cards_in_deck').text(value);
+			}
+			else {
+				$('#opponent_cards_in_deck').text(value);
 			}
 		});
 
@@ -165,11 +177,29 @@ var nameReady = function(name) {
 			$('#' + data.id).remove();
 		});
 
+		game.on('relicEarned', function (sId, value) {
+			if (sId === socket.id) {
+				$('#player_ritual_pieces').text(value);
+			}
+			else {
+				$('#opponent_ritual_pieces').text(value);
+			}
+		});
+
+		game.on('faceDamageEarned', function (sId, value) {
+			if (sId === socket.id) {
+				$('#player_face_damage').text(value);
+			}
+			else {
+				$('#opponent_face_damage').text(value);
+			}
+		});
+
 		game.on('cardPlayed', function (data, mana) {
 			console.log('cardPlayed');
 			console.log(data);
 			var $board;
-      $('#mana').text(mana);
+			$('#mana').text(mana);
 			if (data.player === socket.id) {
 				$('#' + data.id).remove();
 				$board = $('.player-board');
@@ -177,22 +207,22 @@ var nameReady = function(name) {
 				$board = $('.opponent-board');
 			}
 			$board.append(template('card', data));
+			if (data.type != 'player'){
+				$('#' + data.id).on('click', function () {
+					if (selected) {
+						game.emit('attack', selected, data);
+						selected = undefined;
+					}
+					else {
+						selected = data;
+					}
+				})}
+			});
 
-      $('#' + data.id).on('click', function () {
-        if (selected) {
-          game.emit('attack', selected, data);
-          selected = undefined;
-        }
-        else {
-          selected = data;
-        }
-      })
-		});
-
-    game.on('cardKilled', function (data) {
-      console.log('card died');
-      $('#' + data.id).remove();
-    })
+			game.on('cardKilled', function (data) {
+				console.log('card died');
+				$('#' + data.id).remove();
+			})
 
 		game.on('joinedRoom', function (data) {
 			console.log(data.roomName);
