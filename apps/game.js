@@ -9,6 +9,7 @@ var createGame = function (io, room) {
 
 	var game = io.of(room.roomName);
 	var facesRecieved = false;
+	var relicRequirement = [10,15,20,30,40]
 	var turnNum = 0;
 	var player1;
 	var player2;
@@ -238,11 +239,14 @@ var createGame = function (io, room) {
 						return;
 					} else {
 						room.players[sId].facedamage += room.players[sId].board[attacker.id].damage
-						while (room.players[sId].facedamage > 1){
+						while (room.players[sId].facedamage > relicRequirement[room.players[sId].relics]){
+							room.players[sId].facedamage -= relicRequirement[room.players[sId].relics]
 							room.players[sId].relics += 1
-							room.players[sId].facedamage -= 2
 							console.log('relic earned!')
 							game.emit('relicEarned', sId, room.players[sId].relics);
+							if (room.players[sId].relics >= 5){
+								game.emit('gameOver', sId)
+							}
 						}
 						game.emit('faceDamageEarned', sId, room.players[sId].facedamage)
 						room.players[sId].board[attacker.id].attacks -= 1;

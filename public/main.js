@@ -186,6 +186,15 @@ var nameReady = function(name) {
 			}
 		});
 
+    game.on('gameOver', function (sId, value) {
+      if (sId === socket.id) {
+        alert("You won! Congratulations!");
+      }
+      else {
+        alert("You lose! Better luck next time!");
+      }
+    });
+
 		game.on('faceDamageEarned', function (sId, value) {
 			if (sId === socket.id) {
 				$('#player_face_damage').text(value);
