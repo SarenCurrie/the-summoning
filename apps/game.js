@@ -131,8 +131,6 @@ var createGame = function (io, room) {
 
 				socket.emit('cardDrawn', card);
 				game.emit('updateSize', sId, _.size(room.players[sId].deck));
-
-				socket.emit('cardDrawn', card);
 			}
 			else {
 				console.log('card "burnt"');
@@ -143,24 +141,26 @@ var createGame = function (io, room) {
 			console.log('refresh ' + nextPlayer);
 			// console.log(room.players[nextPlayer]);
 			for (var key in room.players[nextPlayer].board) {
-  		room.players[nextPlayer].board[key].attacks = 1;
+				room.players[nextPlayer].board[key].attacks = 1;
 			}
 		}
 
 		socket.on('mulliganCard', function (data) {
 			console.log(sId + ' mulliganed ' + data.name);
+			console.log(room.players[sId].deck);
 			while (true) {
-			var num = Math.floor(Math.random() * (_.size(room.players[sId].deck)));
-			if (room.players[sId].deck[num].type != 'player'){
-				break
+				var num = Math.floor(Math.random() * (_.size(room.players[sId].deck)));
+				console.log('random num: ' + num);
+				if (room.players[sId].deck[num].type != 'player'){
+					break;
+				}
 			}
-			}
-			var temp = room.players[sId].cards[data.id]
-			delete room.players[sId].cards[data.id];
-			socket.emit('cardMulliganed', data);
-			var card = room.players[sId].deck[num]
+			var temp = room.players[sId].cards[data.id];
+			var card = room.players[sId].deck[num];
 			room.players[sId].cards[card.id] = card;
 			room.players[sId].deck[num] = temp;
+			delete room.players[sId].cards[data.id];
+			socket.emit('cardMulliganed', data);
 			socket.emit('cardDrawn', card);
 			game.emit('updateSize', sId, _.size(room.players[sId].deck));
 		});
