@@ -79,9 +79,11 @@ module.exports = function (game) {
 			attacks: 0,
 			type: 'minion',
 			description: 'Battlerattle: If dean is playing the game, he must give everyone chocolate.',
+
+			battleRattleTarget: true,
 			battleRattle: function (room, target) {
 				var self = this;
-
+				console.log(room, target);
 				//
 			},
 			deathCry: function (room) {
