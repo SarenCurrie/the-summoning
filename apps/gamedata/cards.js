@@ -51,7 +51,9 @@ module.exports = function (game) {
 		target.health -= damage;
 		if (target.health <= 0) {
 			game.killCard(target);
+			return;
 		}
+			game.changeCard(target);
 
 	}
 

@@ -270,6 +270,12 @@ var nameReady = function(name) {
 			$('#' + data.id).remove();
 		});
 
+		game.on('cardChanged', function (data) {
+			console.log('updating');
+			$('#' + data.id).find("div.stats").find("span#damage").text(data.damage);
+			$('#' + data.id).find("div.stats").find("span#health").text(data.health);
+		});
+
 		game.on('joinedRoom', function (data) {
 			console.log(data.roomName);
 		});

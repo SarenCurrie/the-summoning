@@ -48,6 +48,10 @@ var createGame = function (io, room) {
 
 				delete room.players[card.player].board[card.id];
 				game.emit('cardKilled', card);
+			},
+			changeCard: function (card) {
+				console.log('Changing card: ' + card.name);
+				game.emit('cardChanged', card);
 			}
 		});
 
