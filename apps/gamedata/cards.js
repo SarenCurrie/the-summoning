@@ -46,11 +46,12 @@ module.exports = function (game) {
 		};
 	}
 
-	function damage(target, damage) {
+	function damage(room, target, damage) {
 
 		target.health -= damage;
 		if (target.health <= 0) {
 			game.killCard(target);
+			target.deathCry(room);
 			return;
 		}
 			game.changeCard(target);
@@ -59,8 +60,8 @@ module.exports = function (game) {
 
 	function simpleAttack (room, self, target) {
 
-		damage(target, self.damage);
-		damage(self, target.damage);
+		damage(room, target, self.damage);
+		damage(room, self, target.damage);
 
 		// target.health -= self.damage;
 		// self.health -= target.damage;
@@ -73,43 +74,43 @@ module.exports = function (game) {
 	}
 
 	var cards = {
-		dean: {
-			name: 'Dean',
-			mana: 1,
-			damage: 1,
-			health: 1,
-			attacks: 0,
-			type: 'minion',
-			description: 'Battlerattle: If dean is playing the game, he must give everyone chocolate.',
-
-			battleRattleTarget: true,
-			battleRattle: function (room, target) {
-				var self = this;
-				console.log(room, target);
-				//
-			},
-			deathCry: function (room) {
-				var self = this;
-
-				//
-			},
-			startOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			endOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			attack: function (room, target) {
-				var self = this;
-
-				game.summonCard(self, self);
-				simpleAttack(room, self, target);
-			}
-		},
+		// dean: {
+		// 	name: 'Dean',
+		// 	mana: 1,
+		// 	damage: 1,
+		// 	health: 1,
+		// 	attacks: 0,
+		// 	type: 'minion',
+		// 	description: 'Battlerattle: If dean is playing the game, he must give everyone chocolate.',
+		//
+		// 	battleRattleTarget: true,
+		// 	battleRattle: function (room, target) {
+		// 		var self = this;
+		// 		console.log(room, target);
+		// 		//
+		// 	},
+		// 	deathCry: function (room) {
+		// 		var self = this;
+		//
+		// 		//
+		// 	},
+		// 	startOfTurn: function (room) {
+		// 		var self = this;
+		//
+		// 		//
+		// 	},
+		// 	endOfTurn: function (room) {
+		// 		var self = this;
+		//
+		// 		//
+		// 	},
+		// 	attack: function (room, target) {
+		// 		var self = this;
+		//
+		// 		game.summonCard(self, self);
+		// 		simpleAttack(room, self, target);
+		// 	}
+		// },
 		player1: {
 			name: 'Player1',
 			mana: 1,
@@ -178,35 +179,6 @@ module.exports = function (game) {
 				//
 			}
 		},
-		bloodyCopter: {
-			name: 'Bloody Copter',
-			image: 'imp.png',
-			mana: 2,
-			damage: 3,
-			health: 2,
-			type: 'minion',
-			description: 'A worse version of Huge Toad.',
-			battleRattle: function (board, target) {
-				var self = this;
-
-				//
-			},
-			startOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			endOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			attack: function (room, target) {
-				var self = this;
-
-				simpleAttack(room, self, target);
-			}
-		},
 		wingriderDemon: {
 			name: 'Wingrider Demon',
 			image: 'DEMON.png',
@@ -224,82 +196,7 @@ module.exports = function (game) {
 			deathCry: function (room) {
 				var self = this;
 
-				game.draw(self.player);
-
-				//
-			},
-			startOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			endOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			attack: function (room, target) {
-				var self = this;
-
-				simpleAttack(room, self, target);
-			}
-		},
-		doctorSix: {
-			name: 'Doctor Six',
-			image: 'dr6.png',
-			mana: 2,
-			damage: 4,
-			health: 4,
-			attacks: 0,
-			type: 'minion',
-			description: 'Doesn\'t have a real medical degree',
-			battleRattle: function (room, target) {
-				var self = this;
-
-				game.draw(self.player);
-				damage(target, 4);
-
-				//
-			},
-			deathCry: function (room) {
-				var self = this;
-
-				//
-			},
-			startOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			endOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			attack: function (room, target) {
-				var self = this;
-
-				simpleAttack(room, self, target);
-			}
-		},
-		homeShower: {
-			name: 'Home Scout',
-			image: 'fighter.png',
-			mana: 2,
-			damage: 5,
-			health: 5,
-			attacks: 0,
-			type: 'minion',
-			description: 'Deathcry: Draw a card.',
-			battleRattle: function (room, target) {
-				var self = this;
-
-				//
-			},
-			deathCry: function (room) {
-				var self = this;
-
-				game.draw(self.player);
+				game.draw(self);
 
 				//
 			},
@@ -322,146 +219,18 @@ module.exports = function (game) {
 		kumaraCopter: {
 			name: 'Kumara Copter',
 			image: 'knightgirl.png',
-			mana: 2,
-			damage: 5,
-			health: 3,
-			attacks: 0,
-			type: 'minion',
-			description: 'Battlerattle: ' + this.name + ' deals damage to a card equal to twice the number of cards you have on your board.',
-			battleRattle: function (room, target) {
-				var self = this;
-
-				damage(target, 2 * _.size(getCardsFromRoom(self, room).player));
-
-				//
-			},
-			deathCry: function (room) {
-				var self = this;
-
-				//
-			},
-			startOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			endOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			attack: function (room, target) {
-				var self = this;
-
-				simpleAttack(room, self, target);
-			}
-
-		},
-		// lightningElemental: {
-		// 	name: 'Lightning Elemental',
-		// 	mana: 2,
-		// 	damage: 5,
-		// 	health: 3,
-		// 	description: 'Battlerattle: Target card get +8/+0 until the end of this turn.',
-		// 	battleRattle: function (room, target) {
-		// 		var self = this;
-		//
-		// 		target.damage += 8;
-		//
-		// 		//set the end of turn remove buff
-		// 		self.endOfTurn = function (room) {
-		// 			target.damage -= 8;
-		// 			//reset the endofTurn function
-		// 			self.endOfTurn = function (room) {
-		// 				var self = this;
-		//
-		// 				//
-		// 			}
-		// 		}
-		//
-		// 		//
-		// 	},
-		// 	deathCry: function (room) {
-		// 		var self = this;
-		//
-		// 		//
-		// 	},
-		// 	startOfTurn: function (room) {
-		// 		var self = this;
-		//
-		// 		//
-		// 	},
-		// 	endOfTurn: function (room) {
-		// 		var self = this;
-		//
-		// 		//
-		// 	},
-		// 	attack: function (room, target) {
-		// 		var self = this;
-		//
-		// 		simpleAttack(room, self, target);
-		// 	}
-		//
-		// }
-		roboSprite: {
-			name: 'Robo Sprite',
-			image: 'robo.png',
-			mana: 4,
-			damage: 0,
-			health: 12,
-			attacks: 0,
-			type: 'minion',
-			description: 'At the start of your turn, destroy all cards.',
-			battleRattle: function (room, target) {
-				var self = this;
-
-				//
-			},
-			deathCry: function (room) {
-				var self = this;
-
-				//
-			},
-			startOfTurn: function (room) {
-				var self = this;
-
-				var cards = getCardsFromRoom(self, room);
-				for (var opponentCard in cards.opponent) {
-					game.killCard(cards.opponent[opponentCard]);
-				}
-				for (var playerCard in cards.player) {
-					game.killCard(cards.player[playerCard]);
-				}
-
-				//
-			},
-			endOfTurn: function (room) {
-				var self = this;
-
-				//
-			},
-			attack: function (room, target) {
-				var self = this;
-
-				simpleAttack(room, self, target);
-			}
-
-		},
-		seismicStriker: {
-			name: 'Seismic Striker',
-			mana: 5,
-			damage: 8,
+			mana: 1,
+			damage: 2,
 			health: 8,
 			attacks: 0,
 			type: 'minion',
-			description: 'Battlerattle: Destroy target card.',
+			description: 'Battlerattle: Target minion gains +8/+0 this turn',
+			battleRattleTarget: true,
 			battleRattle: function (room, target) {
-				var self = this;
-
-				game.killCard(target);
-
-				//
-			},
+					target.damage += 8;
+					game.changeCard(target);
+			 		//
+				},
 			deathCry: function (room) {
 				var self = this;
 
@@ -484,14 +253,15 @@ module.exports = function (game) {
 			}
 
 		},
-		deadRinger: {
-			name: 'Dead Ringer',
-			mana: 5,
-			damage: 10,
-			health: 12,
+		wingridersDemon: {
+			name: 'Wingridersssssss Demon',
+			image: 'DEMON.png',
+			mana: 1,
+			damage: 0,
+			health: 100,
 			attacks: 0,
 			type: 'minion',
-			description: 'Deathcry: Draw a card for each cards on your board. (Reminder: including this card.)',
+			description: 'VALUE',
 			battleRattle: function (room, target) {
 				var self = this;
 
@@ -500,9 +270,8 @@ module.exports = function (game) {
 			deathCry: function (room) {
 				var self = this;
 
-				for (var playerCard in getCardsFromRoom().player) {
-					game.draw(self.player);
-				}
+				game.draw(self);
+
 				//
 			},
 			startOfTurn: function (room) {
@@ -520,7 +289,6 @@ module.exports = function (game) {
 
 				simpleAttack(room, self, target);
 			}
-
 		}
 	};
 

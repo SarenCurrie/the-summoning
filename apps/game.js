@@ -51,7 +51,13 @@ var createGame = function (io, room) {
 			},
 			changeCard: function (card) {
 				console.log('Changing card: ' + card.name);
+				console.log(card)
 				game.emit('cardChanged', card);
+			},
+			draw: function (card) {
+				console.log('Card forcing draw!');
+				drawCard(card);
+				console.log('Done!');
 			}
 		});
 
@@ -143,20 +149,30 @@ var createGame = function (io, room) {
 			return obj[result];
 		}
 
-		socket.on('drawCard', function () {
-			console.log('player ' + sId + ' draws');
-			if (_.size(	room.players[sId].cards) < 10) {
-				var card = room.players[sId].deck.shift();
+		function drawCard(data) {
+			var tempsID
+			if (data){
+				tempsID = data.player
+			} else {
+				tempsID = sId
+			}
+			console.log('player ' + tempsID + ' draws');
+			if (_.size(	room.players[tempsID].cards) < 10) {
+				var card = room.players[tempsID].deck.shift();
 				console.log('deck size is');
-				console.log(_.size(room.players[sId].deck));
-				room.players[sId].cards[card.id] = card;
+				console.log(_.size(room.players[tempsID].deck));
+				room.players[tempsID].cards[card.id] = card;
 
 				socket.emit('cardDrawn', card);
-				game.emit('updateSize', sId, _.size(room.players[sId].deck));
+				game.emit('updateSize', tempsID, _.size(room.players[tempsID].deck));
 			}
 			else {
 				console.log('card "burnt"');
 			}
+		}
+
+		socket.on('drawCard', function (data) {
+			drawCard(data);
 		});
 
 		function refresh (nextPlayer) {
@@ -191,7 +207,7 @@ var createGame = function (io, room) {
 		}
 		});
 
-		socket.on('playCard', function (data) {
+		socket.on('playCard', function (data, target) {
 
 			if (_.size(room.players[sId].board) > 7) {
 				return;
@@ -207,6 +223,21 @@ var createGame = function (io, room) {
 			delete room.players[sId].cards[data.id];
 
 			game.emit('cardPlayed', data, mana);
+
+			if (target) {
+				activateBR(data, target);
+			}
+
+		});
+
+		socket.on('getBoardSize',  function(data) {
+			console.log('here we go');
+			if (data.player == player1){
+				socket.emit('boardSize', _.size(room.players[data.player].board), _.size(room.players[player2].board), data);
+			} else {
+				socket.emit('boardSize', _.size(room.players[player2].board), _.size(room.players[data.player].board), data);
+			}
+
 		});
 
 		socket.on('getFaces',  function() {
@@ -217,6 +248,17 @@ var createGame = function (io, room) {
 				}
 			}
 		});
+
+		function activateBR(card, target) {
+			console.log("activating BR");
+			console.log(card);
+			console.log(target);
+			console.log('check card on board');
+			console.log(room.players[card.player].board[card.id]);
+			console.log('check target on board')
+			console.log(room.players[target.player].board[target.id]);
+			room.players[card.player].board[card.id].battleRattle(room, room.players[target.player].board[target.id]);
+		}
 
 		socket.on('attack', function(attacker, victim) {
 			console.log('attacking');

@@ -180,8 +180,8 @@ var nameReady = function(name) {
 							game.emit('mulliganCard', data);
 						} else {
 							if (data.battleRattleTarget) {
-								cardActionState = 'InBattleRattle';
-								cardDoingBattleRattle = data;
+								console.log('getting board size!')
+								game.emit('getBoardSize', data);
 							}
 							else {
 								game.emit('playCard', data);
@@ -190,6 +190,19 @@ var nameReady = function(name) {
 					}
 				}
 			});
+		});
+
+		game.on('boardSize', function (mine, theirs, data) {
+			console.log('me first!')
+			console.log(mine)
+			console.log(theirs)
+			if (mine == 1 && theirs == 1){
+				game.emit('playCard', data);
+			} else {
+				cardActionState = 'InBattleRattle';
+				cardDoingBattleRattle = data;
+				console.log('BR ONLINE!');
+			}
 		});
 
 		game.on('cardMulliganed', function (data) {
@@ -254,6 +267,7 @@ var nameReady = function(name) {
 						selected = data;
 						cardActionState = 'InAttack';
 					} else if (cardActionState == 'InBattleRattle') {
+						console.log('br activating!');
 						game.emit('playCard', cardDoingBattleRattle, data);
 						cardActionState = 'Normal';
 					} else if (cardActionState == 'InAttack') {
