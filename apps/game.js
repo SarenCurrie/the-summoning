@@ -14,6 +14,7 @@ var createGame = function (io, room) {
 	var player1;
 	var player2;
 	var currentPlayer;
+	var sacrificedMinions = [];
 
 	game.on('connection', function (socket) {
 		var sId = id(socket.id);
@@ -260,6 +261,35 @@ var createGame = function (io, room) {
 				for (var key in room.players) {
 					game.emit('cardPlayed', room.players[key].faces, 0);
 				}
+			}
+		});
+
+		socket.on('sacrifice',  function(data) {
+			var player = data.player;
+			console.log('Sacrificing minion!');
+			console.log(data);
+			sacrificedMinions.push(data);
+			console.log('Deathrow is:');
+			console.log(sacrificedMinions);
+			if (_.size(sacrificedMinions) > 1){
+				room.players[player].relics += 1
+				console.log('relic earned!')
+				game.emit('relicEarned', player, room.players[player].relics);
+				if (room.players[player].relics >= 5){
+					game.emit('gameOver', player)
+				}
+				console.log('I AM DELETING:');
+				console.log(sacrificedMinions);
+				for (var i in sacrificedMinions){
+					minion = sacrificedMinions[i];
+					console.log('Killing card: ' + minion.name);
+					console.log(minion);
+
+					delete room.players[player].board[minion.id];
+					game.emit('cardKilled', minion);
+				}
+				sacrificedMinions = [];
+				socket.emit('sacrificeComplete');
 			}
 		});
 

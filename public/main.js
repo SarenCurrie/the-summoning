@@ -113,7 +113,7 @@ var nameReady = function(name) {
 
 	var cardDoingBattleRattle;
 
-	// Normal, InBattleRattle, InAttack
+	// Normal, InBattleRattle, InAttack, Sacrifice
 	var cardActionState = 'Normal';
 
 	function joinGame(roomData) {
@@ -148,6 +148,11 @@ var nameReady = function(name) {
 				$('#end_turn').on('click', function () {
 					$('#end_turn').off('click');
 					game.emit('endTurn');
+				});
+				$('#sacrifice').on('click', function () {
+					$('#sacrifice').off('click');
+					console.log('Sacrifice beginning!');
+					cardActionState = 'Sacrifice';
 				});
 			}
 		});
@@ -236,6 +241,11 @@ var nameReady = function(name) {
 			}
 		});
 
+		game.on('sacrificeComplete', function () {
+			console.log('Sac completed!')
+			cardActionState = 'Normal';
+		});
+
 		game.on('cardPlayed', function (data, mana) {
 			console.log('cardPlayed');
 			console.log(data);
@@ -274,6 +284,9 @@ var nameReady = function(name) {
 						game.emit('attack', selected, data);
 						selected = undefined;
 						cardActionState = 'Normal';
+					} else if (cardActionState == 'Sacrifice') {
+						console.log('Sacrificing card');
+						game.emit('sacrifice', data);
 					}
 				});
 			}
