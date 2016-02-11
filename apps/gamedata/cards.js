@@ -224,12 +224,84 @@ module.exports = function (game) {
 			health: 8,
 			attacks: 0,
 			type: 'minion',
-			description: 'Battlerattle: Target minion gains +8/+0 this turn',
+			description: 'Battlerattle: Target minion gains +8/+0 this turn.',
 			battleRattleTarget: true,
 			battleRattle: function (room, target) {
 					target.damage += 8;
 					game.changeCard(target);
 			 		//
+				},
+			deathCry: function (room) {
+				var self = this;
+
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			}
+
+		},
+		summoningStone: {
+			name: 'Summoning Stone',
+			image: 'dr6.png',
+			mana: 1,
+			damage: 6,
+			health: 6,
+			attacks: 0,
+			type: 'minion',
+			description: 'EoT: Summon a Sleeping Statue.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+				},
+			deathCry: function (room) {
+				var self = this;
+
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+				game.summonCard(self, cards.sleepingStatue);
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			}
+
+		},
+		sleepingStatue: {
+			name: 'Sleeping Statue',
+			image: 'dr6.png',
+			mana: 0,
+			damage: 0,
+			health: 1,
+			attacks: 0,
+			type: 'minion',
+			description: '-.-',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
 				},
 			deathCry: function (room) {
 				var self = this;

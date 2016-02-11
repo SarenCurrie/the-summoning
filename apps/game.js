@@ -37,6 +37,10 @@ var createGame = function (io, room) {
 				var cardId = uuid.v4();
 				var card = {};
 
+				if (_.size(room.players[pId].board) > 7) {
+					return;
+				}
+
 				_.extend(card, summonee, {player: pId, id: cardId});
 
 				room.players[pId].board[cardId] = card;
@@ -73,6 +77,9 @@ var createGame = function (io, room) {
 				for (var key in cardSet) {
 					if (count == num){
 					if (cardSet[key].type == 'player'){
+						break
+					}
+					if (cardSet[key].name == 'Sleeping Statue'){
 						break
 					}
 					var cardId = uuid.v4();
@@ -121,13 +128,20 @@ var createGame = function (io, room) {
 		socket.on('endTurn', function () {
 			var sId = id(socket.id);
 			var nextPlayer = sId === player1 ? player2 : player1;
-
+			console.log('EoT');
+			for (var key in room.players[sId].board) {
+				room.players[sId].board[key].endOfTurn(room);
+			}
 			if (sId === player2) {
 				turnNum++;
 			}
 			room.players[nextPlayer].mana = turnNum;
 
 			console.log(nextPlayer + ' is starting turn ' + turnNum);
+			console.log('SoT');
+			for (var key in room.players[nextPlayer].board) {
+				room.players[nextPlayer].board[key].startOfTurn(room);
+			}
 
 			refresh(nextPlayer)
 
