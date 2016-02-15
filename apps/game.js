@@ -9,12 +9,14 @@ var createGame = function (io, room) {
 
 	var game = io.of(room.roomName);
 	var facesRecieved = false;
-	var relicRequirement = [10,15,20,30,40]
+	var relicRequirement = [10,15,20,30,40];
+	var sacrificeRequirement = [2,3,4,5,5];
 	var turnNum = 0;
 	var player1;
 	var player2;
 	var currentPlayer;
 	var sacrificedMinions = [];
+	var graveyard = [];
 
 	game.on('connection', function (socket) {
 		var sId = id(socket.id);
@@ -50,7 +52,12 @@ var createGame = function (io, room) {
 			},
 			killCard: function (card) {
 				console.log('Killing card: ' + card.name);
-
+				room.players[card.player].board[card.id].causeOfDeath = 'damage'
+				var dedCard = room.players[card.player].board[card.id];
+				graveyard.push(dedCard);
+				room.players[card.player].board[card.id].deathCry(room);
+			},
+			itsReallyOver: function (card) {
 				delete room.players[card.player].board[card.id];
 				game.emit('cardKilled', card);
 			},
@@ -59,9 +66,9 @@ var createGame = function (io, room) {
 				console.log(card)
 				game.emit('cardChanged', card);
 			},
-			draw: function (card) {
+			draw: function (card, list) {
 				console.log('Card forcing draw!');
-				drawCard(card);
+				drawCard(card, list);
 				console.log('Done!');
 			}
 		});
@@ -133,6 +140,12 @@ var createGame = function (io, room) {
 			for (var key in room.players[sId].board) {
 				room.players[sId].board[key].endOfTurn(room);
 			}
+			console.log('graveyard was:');
+			console.log(graveyard);
+			graveyard = [];
+			console.log('graveyard is:');
+			console.log(graveyard);
+
 			if (sId === player2) {
 				turnNum++;
 			}
@@ -164,7 +177,7 @@ var createGame = function (io, room) {
 			return obj[result];
 		}
 
-		function drawCard(data) {
+		function drawCard(data, list) {
 			var tempsID
 			if (data){
 				tempsID = data.player
@@ -173,6 +186,15 @@ var createGame = function (io, room) {
 			}
 			console.log('player ' + tempsID + ' draws');
 			if (_.size(	room.players[tempsID].cards) < 10) {
+				if (list) {
+					for (i in list) {
+						var cardId = uuid.v4();
+						var card = {};
+						_.extend(card, cardSet[list[i]], {player: tempsID, id: cardId});
+						room.players[tempsID].cards[card.id] = card;
+						socket.emit('cardDrawn', card);
+					}
+				} else {
 				var card = room.players[tempsID].deck.shift();
 				console.log('deck size is');
 				console.log(_.size(room.players[tempsID].deck));
@@ -180,6 +202,7 @@ var createGame = function (io, room) {
 
 				socket.emit('cardDrawn', card);
 				game.emit('updateSize', tempsID, _.size(room.players[tempsID].deck));
+			}
 			}
 			else {
 				console.log('card "burnt"');
@@ -241,6 +264,8 @@ var createGame = function (io, room) {
 
 			if (target) {
 				activateBR(data, target);
+			} else {
+				room.players[sId].board[data.id].battleRattle();
 			}
 
 		});
@@ -284,9 +309,10 @@ var createGame = function (io, room) {
 					minion = sacrificedMinions[i];
 					console.log('Killing card: ' + minion.name);
 					console.log(minion);
-
-					delete room.players[player].board[minion.id];
-					game.emit('cardKilled', minion);
+					room.players[card.player].board[minion.id].causeOfDeath = 'sacrifice'
+					var dedCard = room.players[card.player].board[minion.id];
+					graveyard.push(dedCard);
+					room.players[card.player].board[minion.id].deathCry(room);
 				}
 				sacrificedMinions = [];
 				socket.emit('sacrificeComplete');
