@@ -48,7 +48,7 @@ var createGame = function (io, room) {
 
 				room.players[pId].board[cardId] = card;
 
-				game.emit('cardPlayed', card, 0);
+				game.emit('cardPlayed', card, room.players[pId].mana);
 			},
 			killCard: function (card) {
 				console.log('Killing card: ' + card.name);
@@ -61,9 +61,13 @@ var createGame = function (io, room) {
 				delete room.players[card.player].board[card.id];
 				game.emit('cardKilled', card);
 			},
+			discardCard: function (card) {
+				delete room.players[card.player].cards[card.id];
+				game.emit('cardDiscarded', card);
+			},
 			changeCard: function (card) {
 				console.log('Changing card: ' + card.name);
-				console.log(card)
+				console.log(card);
 				game.emit('cardChanged', card);
 			},
 			draw: function (card, list) {
@@ -140,6 +144,15 @@ var createGame = function (io, room) {
 			for (var key in room.players[sId].board) {
 				room.players[sId].board[key].endOfTurn(room);
 			}
+
+			for (var key in room.players[sId].board) {
+				room.players[sId].board[key].onEvent(room, 'cleanup');
+			}
+			console.log('cleaning up');
+			for (var i in graveyard) {
+				graveyard[i].onEvent(room, 'cleanup');
+			}
+
 			console.log('graveyard was:');
 			console.log(graveyard);
 			graveyard = [];
@@ -265,17 +278,19 @@ var createGame = function (io, room) {
 			if (target) {
 				activateBR(data, target);
 			} else {
-				room.players[sId].board[data.id].battleRattle();
+				room.players[sId].board[data.id].battleRattle(room);
 			}
 
 		});
 
 		socket.on('getBoardSize',  function(data) {
 			console.log('here we go');
+			console.log(room.players[data.player].board);
+			console.log(room.players[player2].board);
 			if (data.player == player1){
 				socket.emit('boardSize', _.size(room.players[data.player].board), _.size(room.players[player2].board), data);
 			} else {
-				socket.emit('boardSize', _.size(room.players[player2].board), _.size(room.players[data.player].board), data);
+				socket.emit('boardSize', _.size(room.players[data.player].board), _.size(room.players[player1].board), data);
 			}
 
 		});

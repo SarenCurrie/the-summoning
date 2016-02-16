@@ -285,8 +285,14 @@ var nameReady = function(name) {
 						selected = undefined;
 						cardActionState = 'Normal';
 					} else if (cardActionState == 'Sacrifice') {
+						if (!(data.player === socket.id)){
+							console.log('You can\'t sacrifice your opponents minions! (Nice try :P)');
+						} else if (data.type == 'player') {
+							console.log('You can\'t sacrifice yourself! (Why? Just, why?)');
+						} else {
 						console.log('Sacrificing card');
 						game.emit('sacrifice', data);
+					}
 					}
 				});
 			}
@@ -294,6 +300,11 @@ var nameReady = function(name) {
 
 		game.on('cardKilled', function (data) {
 			console.log('card died');
+			$('#' + data.id).remove();
+		});
+
+		game.on('cardDiscarded', function (data) {
+			console.log('card discarded');
 			$('#' + data.id).remove();
 		});
 

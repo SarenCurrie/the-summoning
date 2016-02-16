@@ -112,6 +112,7 @@ module.exports = function (game) {
 		// },
 		player1: {
 			name: 'Player1',
+			ident : 'player1',
 			mana: 1,
 			damage: 1,
 			health: 1,
@@ -143,10 +144,16 @@ module.exports = function (game) {
 				var self = this;
 
 				//
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
 			}
 		},
 		player2: {
 			name: 'Player2',
+			ident : 'player2',
 			mana: 1,
 			damage: 1,
 			health: 1,
@@ -178,10 +185,16 @@ module.exports = function (game) {
 				var self = this;
 
 				//
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
 			}
 		},
 		wingriderDemon: {
 			name: 'Wingrider Demon',
+			ident : 'wingriderDemon',
 			image: 'DEMON.png',
 			mana: 1,
 			damage: 2,
@@ -217,10 +230,16 @@ module.exports = function (game) {
 				var self = this;
 
 				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
 			}
 		},
 		kumaraCopter: {
 			name: 'Kumara Copter',
+			ident : 'kumaraCopter',
 			image: 'knightgirl.png',
 			mana: 1,
 			damage: 2,
@@ -228,11 +247,14 @@ module.exports = function (game) {
 			attacks: 0,
 			causeOfDeath: 'notDead',
 			type: 'minion',
-			description: 'Battlerattle: Target minion gains +6/+0.',
+			description: 'Battlerattle: Target minion gains +8/+0 this turn.',
 			battleRattleTarget: true,
 			battleRattle: function (room, target) {
-					target.damage += 6;
+				if (target) {
+					target.damage += 8;
+					this.debuff = target;
 					game.changeCard(target);
+				}
 			 		//
 				},
 			deathCry: function (room) {
@@ -255,11 +277,26 @@ module.exports = function (game) {
 				var self = this;
 
 				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+				if (effect == 'cleanup'){
+				if (self.debuff){
+					var debuffed = self.debuff
+					if (debuffed){
+					debuffed.damage -= 8;
+					game.changeCard(debuffed);
+				}
+					self.debuff = undefined;
+				}
+			}
+				//
 			}
 
 		},
 		summoningStone: {
 			name: 'Summoning Stone',
+			ident : 'summoningStone',
 			image: 'dr6.png',
 			mana: 1,
 			damage: 6,
@@ -285,18 +322,24 @@ module.exports = function (game) {
 			},
 			endOfTurn: function (room) {
 				var self = this;
-				game.summonCard(self, cards.sleepingStatue);
+				game.summonCard(self, cards['sleepingStatue']);
 				//
 			},
 			attack: function (room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
 			}
 
 		},
 		sleepingStatue: {
 			name: 'Sleeping Statue',
+			ident : 'sleepingStatue',
 			image: 'zand.png',
 			mana: 0,
 			damage: 0,
@@ -329,26 +372,27 @@ module.exports = function (game) {
 				var self = this;
 
 				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
 			}
 
 		},
-		cunningCobra: {
-			name: 'Cunning Cobra',
-			image: 'cobra.png',
-			mana: 2,
-			damage: 4,
-			health: 4,
+		dustWight: {
+			name: 'Dust Wight',
+			ident : 'dustWight',
+			image: 'zand.png',
+			mana: 3,
+			damage: 8,
+			health: 6,
 			attacks: 0,
 			causeOfDeath: 'notDead',
 			type: 'minion',
-			battleRattleTarget: true,
-			description: 'Battlerattle: Deal 4 damage to a minion. If it kills the minion, draw a card.',
+			description: 'If this minion is sacrificed, summon a Dust Wight at EoT.',
 			battleRattle: function (room, target) {
 				var self = this;
-				if (target.health <= 4){
-					game.draw(self);
-				}
-				damage(room, target, 4);
 
 				//
 				},
@@ -371,24 +415,37 @@ module.exports = function (game) {
 				var self = this;
 
 				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				if (effect == 'cleanup'){
+					if (this.causeOfDeath == 'sacrifice'){
+						game.summonCard(this, cards.dustWight);
+					}
+				}
 			}
 
 		},
-		desertMarauder: {
-			name: 'Desert Marauder',
-			image: 'maraudererer.png',
-			mana: 2,
-			damage: 5,
-			health: 3,
+		suspiciousStatue: {
+			name: 'Suspicious Statue',
+			ident : 'suspiciousStatue',
+			image: 'zand.png',
+			mana: 1,
+			damage: 0,
+			health: 1,
 			attacks: 0,
 			causeOfDeath: 'notDead',
 			type: 'minion',
-			battleRattleTarget: true,
-			description: 'Battlerattle: Deal damage to a minion equal to x2 the number of minions on your board.',
+			description: 'Battlerattle: Summon the leftmost 2 mana minion in your hand.',
 			battleRattle: function (room, target) {
 				var self = this;
-
-				damage(room, target, (_.size(room.players[self.player].board)-1)*2);
+				for (var key in room.players[self.player].cards) {
+					if (room.players[self.player].cards[key].mana == 2) {
+						game.summonCard(self, cards[room.players[self.player].cards[key].ident]);
+						game.discardCard(room.players[self.player].cards[key]);
+						return;
+					}
+				}
+				//
 				},
 			deathCry: function (room) {
 				var self = this;
@@ -409,11 +466,112 @@ module.exports = function (game) {
 				var self = this;
 
 				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		cunningCobra: {
+			name: 'Cunning Cobra',
+			ident : 'cunningCobra',
+			image: 'cobra.png',
+			mana: 2,
+			damage: 4,
+			health: 4,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			battleRattleTarget: true,
+			description: 'Battlerattle: Deal 4 damage to a minion. If it kills the minion, draw a card.',
+			battleRattle: function (room, target) {
+				var self = this;
+				if (target){
+				if (target.health <= 4){
+					game.draw(self);
+				}
+				damage(room, target, 4);
+				}
+
+				//
+				},
+			deathCry: function (room) {
+				var self = this;
+        game.itsReallyOver(self);
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		desertMarauder: {
+			name: 'Desert Marauder',
+			ident : 'desertMarauder',
+			image: 'maraudererer.png',
+			mana: 2,
+			damage: 5,
+			health: 3,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			battleRattleTarget: true,
+			description: 'Battlerattle: Deal damage to a minion equal to x2 the number of minions on your board.',
+			battleRattle: function (room, target) {
+				var self = this;
+				if (target) {
+				damage(room, target, (_.size(room.players[self.player].board)-1)*2);
+				}
+				},
+			deathCry: function (room) {
+				var self = this;
+				game.itsReallyOver(self);
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
 			}
 
 		},
 		locustSwarm: {
 			name: 'Locust Swarm',
+			ident : 'locustSwarm',
 			image: 'swarm.png',
 			mana: 2,
 			damage: 6,
@@ -449,11 +607,17 @@ module.exports = function (game) {
 				var self = this;
 
 				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
 			}
 
 		},
 		wingridersDemon: {
 			name: 'Wingridersssssss Demon',
+			ident : 'wingridersDemon',
 			image: 'DEMON.png',
 			mana: 1,
 			damage: 0,
@@ -487,6 +651,11 @@ module.exports = function (game) {
 				var self = this;
 
 				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
 			}
 		}
 	};
