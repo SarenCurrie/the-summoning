@@ -40,7 +40,7 @@ var createGame = function (io, room) {
 				var cardId = uuid.v4();
 				var card = {};
 
-				if (_.size(room.players[pId].board) > 7) {
+				if (_.size(room.players[pId].board) > 6) {
 					return;
 				}
 
@@ -259,8 +259,10 @@ var createGame = function (io, room) {
 		});
 
 		socket.on('playCard', function (data, target) {
+			console.log('board size is');
+			console.log(_.size(room.players[sId].board));
 
-			if (_.size(room.players[sId].board) > 7) {
+			if (_.size(room.players[sId].board) > 6) {
 				return;
 			}
 
@@ -299,12 +301,18 @@ var createGame = function (io, room) {
 			if (!facesRecieved){
 				facesRecieved = true;
 				for (var key in room.players) {
-					game.emit('cardPlayed', room.players[key].faces, 0);
+					game.emit('cardPlayed', room.players[key].faces, 1);
 				}
 			}
 		});
 
 		socket.on('sacrifice',  function(data) {
+			for (var i in sacrificedMinions){
+				if (data.id == sacrificedMinions[i].id){
+				console.log('Minion already sacrificed!');
+				return;
+			}
+			}
 			var player = data.player;
 			console.log('Sacrificing minion!');
 			console.log(data);
