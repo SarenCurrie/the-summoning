@@ -3,15 +3,15 @@ var id = require('./util/idHandler');
 var cards = require('./gamedata/cards');
 var uuid = require('node-uuid');
 
-var createGame = function (io, room) {
+var createGame = function(io, room) {
 	console.log('creating namespace ' + room.roomName);
 
 	// Create socket.io namespace for room
 	var game = io.of(room.roomName);
 
 	var facesRecieved = false;
-	var relicRequirement = [10,15,20,30,40];
-	var sacrificeRequirement = [2,3,4,5,5];
+	var relicRequirement = [10, 15, 20, 30, 40];
+	var sacrificeRequirement = [2, 3, 4, 5, 5];
 	var turnNum = 0;
 	var player1;
 	var player2;
@@ -19,7 +19,7 @@ var createGame = function (io, room) {
 	var sacrificedMinions = [];
 	room.graveyard = [];
 
-	game.on('connection', function (socket) {
+	game.on('connection', function(socket) {
 		var sId = id(socket.id);
 
 		console.log(sId + ' joined ' + room.roomName);
@@ -35,7 +35,7 @@ var createGame = function (io, room) {
 		room.players[sId].mullcards = [];
 
 		var cardSet = cards({
-			summonCard: function (summoner, summonee) {
+			summonCard: function(summoner, summonee) {
 				console.log('summoning card');
 
 				var pId = summoner.player;
@@ -53,46 +53,48 @@ var createGame = function (io, room) {
 
 				game.emit('cardPlayed', card, room.players[pId].mana);
 			},
-			killCard: function (card) {
+			killCard: function(card) {
 				console.log('Killing card: ' + card.name);
 				room.players[card.player].board[card.id].causeOfDeath = 'damage';
 				var deadCard = room.players[card.player].board[card.id];
 				room.graveyard.push(deadCard);
 				room.players[card.player].board[card.id].deathCry(room);
+
 				// Remember to edit this for both sides.
 				for (var key in room.players[card.player].board) {
 					room.players[card.player].board[key].onEvent(room, 'death');
 				}
 			},
+
 			// @FIXME: Rename this method
-			itsReallyOver: function (card) {
+			itsReallyOver: function(card) {
 				delete room.players[card.player].board[card.id];
 				game.emit('cardKilled', card);
 			},
-			discardCard: function (card) {
+			discardCard: function(card) {
 				delete room.players[card.player].cards[card.id];
 				game.emit('cardDiscarded', card);
 			},
-			changeCard: function (card) {
+			changeCard: function(card) {
 				console.log('Changing card: ' + card.name);
 				console.log(card);
 				game.emit('cardChanged', card);
 			},
-			draw: function (card, list) {
+			draw: function(card, list) {
 				console.log('Card forcing draw!');
 				drawCard(card, list);
 				console.log('Done!');
 			},
-			earnDamage: function (card, amount, self){
+			earnDamage: function(card, amount, self) {
 				var toAward = card.player;
 				if (self) {
-						if (card.player == player1){
-							toAward = player2;
-						} else {
-							toAward = player1;
-						}
+					if (card.player == player1) {
+						toAward = player2;
+					} else {
+						toAward = player1;
+					}
 				}
-				console.log('Awarding ' + amount + ' damage to ' + toAward +'.');
+				console.log('Awarding ' + amount + ' damage to ' + toAward + '.');
 				hitFace(toAward, amount);
 			}
 		});
@@ -105,13 +107,13 @@ var createGame = function (io, room) {
 				var cardFound = false;
 				for (var key in cardSet) {
 					if (count == num) {
-						if (cardSet[key].type == 'player'){
+						if (cardSet[key].type == 'player') {
 							break;
 						}
-						if (cardSet[key].token){
+						if (cardSet[key].token) {
 							break;
 						}
-						if (cardSet[key].name == 'Sleeping Statue'){
+						if (cardSet[key].name == 'Sleeping Statue') {
 							break;
 						}
 						var cardId = uuid.v4();
@@ -122,8 +124,8 @@ var createGame = function (io, room) {
 					}
 					count += 1;
 				}
-				if (cardFound == true){
-					if (i < 3){
+				if (cardFound == true) {
+					if (i < 3) {
 						room.players[sId].mullcards[i] = room.players[sId].deck[i].id;
 					}
 					break;
@@ -141,8 +143,7 @@ var createGame = function (io, room) {
 			_.extend(card, cardSet.player1, {player: sId, id: cardId});
 			room.players[sId].board[cardId] = card;
 			room.players[sId].faces = card;
-		}
-		else {
+		} else {
 			player2 = sId;
 			var cardId = uuid.v4(); // Generate unique id
 			var card = {};
@@ -157,7 +158,7 @@ var createGame = function (io, room) {
 			});
 		}
 
-		socket.on('endTurn', function () {
+		socket.on('endTurn', function() {
 			console.log('End of turn');
 			var sId = id(socket.id);
 			var nextPlayer = sId === player1 ? player2 : player1;
@@ -204,14 +205,14 @@ var createGame = function (io, room) {
 			var result;
 			var count = 0;
 			for (var prop in obj) {
-				if (Math.random() < 1/++count) {
+				if (Math.random() < 1 / ++count) {
 					result = prop;
 				}
 			}
 			return obj[result];
 		}
 
-		function hitFace(playerToAward,howMuch) {
+		function hitFace(playerToAward, howMuch) {
 			room.players[playerToAward].facedamage += howMuch;
 			while (room.players[playerToAward].facedamage > relicRequirement[room.players[playerToAward].relics]) {
 				room.players[playerToAward].facedamage -= relicRequirement[room.players[playerToAward].relics];
@@ -233,7 +234,7 @@ var createGame = function (io, room) {
 				tempsID = sId;
 			}
 			console.log('player ' + tempsID + ' draws');
-			if (_.size(	room.players[tempsID].cards) < 10) {
+			if (_.size(room.players[tempsID].cards) < 10) {
 				if (list) {
 					for (i in list) {
 						var cardId = uuid.v4();
@@ -251,33 +252,33 @@ var createGame = function (io, room) {
 					socket.emit('cardDrawn', card);
 					game.emit('updateSize', tempsID, _.size(room.players[tempsID].deck));
 				}
-			}
-			else {
+			} else {
 				console.log('card "burnt"');
 			}
 		}
 
-		socket.on('drawCard', function (data) {
+		socket.on('drawCard', function(data) {
 			drawCard(data);
 		});
 
-		function refresh (nextPlayer) {
+		function refresh(nextPlayer) {
 			console.log('refresh ' + nextPlayer);
+
 			// console.log(room.players[nextPlayer]);
 			for (var key in room.players[nextPlayer].board) {
 				room.players[nextPlayer].board[key].attacks = 1;
 			}
 		}
 
-		socket.on('mulliganCard', function (data) {
-			if (_.contains(room.players[sId].mullcards,data.id)){
+		socket.on('mulliganCard', function(data) {
+			if (_.contains(room.players[sId].mullcards, data.id)) {
 				console.log(sId + ' mulliganed ' + data.name);
 				console.log(room.players[sId].deck);
 				var num;
 				while (true) {
 					num = Math.floor(Math.random() * (_.size(room.players[sId].deck)));
 					console.log('random num: ' + num);
-					if (room.players[sId].deck[num].type != 'player'){
+					if (room.players[sId].deck[num].type != 'player') {
 						break;
 					}
 				}
@@ -294,7 +295,7 @@ var createGame = function (io, room) {
 			}
 		});
 
-		socket.on('playCard', function (data, target) {
+		socket.on('playCard', function(data, target) {
 			console.log('board size is');
 			console.log(_.size(room.players[sId].board));
 
@@ -325,7 +326,7 @@ var createGame = function (io, room) {
 			console.log('here we go');
 			console.log(room.players[data.player].board);
 			console.log(room.players[player2].board);
-			if (data.player == player1){
+			if (data.player == player1) {
 				socket.emit('boardSize', _.size(room.players[data.player].board), _.size(room.players[player2].board), data);
 			} else {
 				socket.emit('boardSize', _.size(room.players[data.player].board), _.size(room.players[player1].board), data);
@@ -356,11 +357,11 @@ var createGame = function (io, room) {
 			sacrificedMinions.push(data);
 			console.log('Deathrow is:');
 			console.log(sacrificedMinions);
-			if (_.size(sacrificedMinions) > 1){
+			if (_.size(sacrificedMinions) > 1) {
 				room.players[player].relics += 1;
 				console.log('relic earned!');
 				game.emit('relicEarned', player, room.players[player].relics);
-				if (room.players[player].relics >= 5){
+				if (room.players[player].relics >= 5) {
 					game.emit('gameOver', player);
 				}
 				console.log('player sacrificed');
@@ -414,7 +415,7 @@ var createGame = function (io, room) {
 						console.log('You must clear the board before going face!');
 						return;
 					} else {
-						hitFace(sId,room.players[sId].board[attacker.id].damage);
+						hitFace(sId, room.players[sId].board[attacker.id].damage);
 						room.players[sId].board[attacker.id].attacks -= 1;
 						return;
 					}
