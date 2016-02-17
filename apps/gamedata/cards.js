@@ -237,6 +237,51 @@ module.exports = function (game) {
 				//
 			}
 		},
+		jackalwere: {
+			name: 'Jackalwere',
+			ident : 'jackalwere',
+			image: 'DEMON.png',
+			mana: 2,
+			damage: 5,
+			health: 5,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Deathcry: Draw a card.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+			},
+			deathCry: function (room) {
+				var self = this;
+
+				game.draw(self);
+
+				game.itsReallyOver(self);
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
+			}
+		},
 		kumaraCopter: {
 			name: 'Kumara Copter',
 			ident : 'kumaraCopter',
@@ -356,6 +401,328 @@ module.exports = function (game) {
 			deathCry: function (room) {
 				var self = this;
         game.itsReallyOver(self);
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		mummyLord: {
+			name: 'Mummy Lord',
+			ident : 'mummyLord',
+			image: 'zand.png',
+			mana: 4,
+			damage: 6,
+			health: 8,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Whenever one of your minions die in combat, summon a 2/2 Lil\' Mummy.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+				},
+			deathCry: function (room) {
+				var self = this;
+				game.itsReallyOver(self);
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+				if (effect == 'death'){
+					game.summonCard(self, cards['lilMummy']);
+				}
+
+				//
+			}
+
+		},
+		lilMummy: {
+			name: 'Lil\' Mummy',
+			ident : 'lilMummy',
+			image: 'zand.png',
+			mana: 0,
+			damage: 2,
+			health: 2,
+			attacks: 0,
+			token: true,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+
+			description: 'Not as cute as the name suggests.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+				},
+			deathCry: function (room) {
+				var self = this;
+				game.itsReallyOver(self);
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		skeletalSandworm: {
+			name: 'Skeletal Sandworm',
+			ident : 'skeletalSandworm',
+			image: 'zand.png',
+			mana: 4,
+			damage: 8,
+			health: 10,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Deathcry: Draw a card. If sacrificed, draw 2.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+				},
+			deathCry: function (room) {
+				var self = this;
+				game.draw(self);
+				if (self.causeOfDeath == 'sacrifice'){
+					game.draw(self);
+				}
+        game.itsReallyOver(self);
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		theHarbinger: {
+			name: 'The Harbinger',
+			ident : 'theHarbinger',
+			image: 'zand.png',
+			mana: 4,
+			damage: 0,
+			health: 12,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'SoT: Destroy ALL minions.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+				},
+			deathCry: function (room) {
+				var self = this;
+				game.itsReallyOver(self);
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+				for (var key in room.players) {
+				for (var key2 in room.players[key].board) {
+					var card = room.players[key].board[key2];
+					if (self.id != card.id){
+					if (card.type != 'player'){
+					game.killCard(card);
+				}
+				}
+				}
+			}
+				game.killCard(self); // Sudoku. ;_;
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		masonsApprentice: {
+			name: 'Mason\'s Apprentice',
+			ident : 'masonsApprentice',
+			image: 'zand.png',
+			mana: 2,
+			damage: 4,
+			health: 6,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Deathcry: Summon a Sleeping Statue.',
+			battleRattle: function (room, target) {
+				var self = this;
+
+				//
+				},
+			deathCry: function (room) {
+				var self = this;
+				game.summonCard(self, cards['sleepingStatue']);
+        game.itsReallyOver(self);
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		masterMason: {
+			name: 'Master Mason',
+			ident : 'masterMason',
+			image: 'zand.png',
+			mana: 3,
+			damage: 5,
+			health: 9,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Battlerattle: Summon a Sleeping Statue.',
+			battleRattle: function (room, target) {
+				var self = this;
+				game.summonCard(self, cards['sleepingStatue']);
+				//
+				},
+			deathCry: function (room) {
+				var self = this;
+        game.itsReallyOver(self);
+				//
+			},
+			startOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function (room) {
+				var self = this;
+
+				//
+			},
+			attack: function (room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function (room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		manicMerchant: {
+			name: 'Manic Merchant',
+			ident : 'manicMerchant',
+			image: 'zand.png',
+			mana: 1,
+			damage: 8,
+			health: 7,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Battlerattle: Draw a card. Deathcry: Deal 5 damage to yourself.',
+			battleRattle: function (room, target) {
+				var self = this;
+				game.draw(self);
+				//
+				},
+			deathCry: function (room) {
+				var self = this;
+				game.earnDamage(self, 5, true);
+				game.itsReallyOver(self);
 				//
 			},
 			startOfTurn: function (room) {
