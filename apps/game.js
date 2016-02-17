@@ -1,5 +1,4 @@
 var _ = require('underscore');
-var iconMapper = require('./util/iconMapper');
 var id = require('./util/idHandler');
 var cards = require('./gamedata/cards');
 var uuid = require('node-uuid');

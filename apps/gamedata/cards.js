@@ -1,4 +1,3 @@
-var iconMapper = require('../util/iconMapper');
 var _ = require('underscore');
 
 // Card = function(obj) {
