@@ -1,13 +1,17 @@
 {
   "name": "city-states",
   "version": "0.1.0",
-  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ladiespls/the-summoning.git"
+  },
+  "description": "An online trading card game, in early development. Initially created for Global Game Jam 2016.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Saren Currie",
-  "license": "MIT",
+  "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
     "express": "^4.13.3",
     "node-uuid": "^1.4.7",
