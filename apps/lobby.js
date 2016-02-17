@@ -4,8 +4,8 @@ var id = require('./util/idHandler');
 var rooms = {};
 var players = {};
 
-var createLobby = function (socket, io) {
-	socket.on('createRoom', function (data) {
+var createLobby = function(socket, io) {
+	socket.on('createRoom', function(data) {
 		var sId = id(socket.id);
 
 		if (data.roomName === '' || rooms.hasOwnProperty(data.roomName)) {
@@ -15,8 +15,7 @@ var createLobby = function (socket, io) {
 				success: false,
 				message: 'Room already exists'
 			});
-		}
-		else {
+		} else {
 			rooms[data.roomName] = {
 				players: {},
 				roomName: data.roomName
@@ -26,7 +25,7 @@ var createLobby = function (socket, io) {
 				name: data.name,
 				roomName: data.roomName,
 				ready: false
-			}
+			};
 
 			players[sId].room = data.roomName;
 
@@ -42,7 +41,7 @@ var createLobby = function (socket, io) {
 		}
 	});
 
-	socket.on('joinRoom', function (data) {
+	socket.on('joinRoom', function(data) {
 		var sId = id(socket.id);
 
 		if (rooms.hasOwnProperty(data.roomName) && !rooms[data.roomName].players.hasOwnProperty(sId)) {
@@ -63,8 +62,7 @@ var createLobby = function (socket, io) {
 			});
 
 			console.log(data.name + ' joined room ' + data.roomName);
-		}
-		else {
+		} else {
 			socket.emit('joinedRoom', {
 				id: sId,
 				name: data.name,
@@ -74,7 +72,7 @@ var createLobby = function (socket, io) {
 		}
 	});
 
-	socket.on('ready', function (data) {
+	socket.on('ready', function(data) {
 		var sId = id(socket.id);
 		var name = players[sId].name;
 
@@ -124,14 +122,14 @@ var createLobby = function (socket, io) {
 	}
 
 	return {
-		addPlayer: function (playerId, name) {
+		addPlayer: function(playerId, name) {
 			players[playerId] = {
 				name: name
 			};
 			console.log(players);
 			console.log(rooms);
 		},
-		removePlayer: function (playerId) {
+		removePlayer: function(playerId) {
 			if (players[playerId].room) {
 				delete rooms[players[playerId].room].players[playerId];
 				if (Object.keys(rooms[players[playerId].room].players).length === 0) {
@@ -143,6 +141,6 @@ var createLobby = function (socket, io) {
 			console.log(rooms);
 		}
 	};
-}
+};
 
 module.exports = createLobby;

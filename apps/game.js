@@ -47,7 +47,7 @@ var createGame = function(io, room) {
 					return;
 				}
 
-				_.extend(card, summonee, {player: pId, id: cardId});
+				_.extend(card, summonee, { player: pId, id: cardId });
 
 				room.players[pId].board[cardId] = card;
 
@@ -118,7 +118,7 @@ var createGame = function(io, room) {
 						}
 						var cardId = uuid.v4();
 						var card = {};
-						_.extend(card, cardSet[key], {player: sId, id: cardId});
+						_.extend(card, cardSet[key], { player: sId, id: cardId });
 						room.players[sId].deck[i]  = card;
 						cardFound = true;
 					}
@@ -140,14 +140,14 @@ var createGame = function(io, room) {
 			player1 = sId;
 			var cardId = uuid.v4(); // Generate unique id
 			var card = {};
-			_.extend(card, cardSet.player1, {player: sId, id: cardId});
+			_.extend(card, cardSet.player1, { player: sId, id: cardId });
 			room.players[sId].board[cardId] = card;
 			room.players[sId].faces = card;
 		} else {
 			player2 = sId;
 			var cardId = uuid.v4(); // Generate unique id
 			var card = {};
-			_.extend(card, cardSet.player2, {player: sId, id: cardId});
+			_.extend(card, cardSet.player2, { player: sId, id: cardId });
 			room.players[sId].board[cardId] = card;
 			room.players[sId].faces = card;
 			console.log('starting game');
@@ -239,7 +239,7 @@ var createGame = function(io, room) {
 					for (i in list) {
 						var cardId = uuid.v4();
 						var card = {};
-						_.extend(card, cardSet[list[i]], {player: tempsID, id: cardId});
+						_.extend(card, cardSet[list[i]], { player: tempsID, id: cardId });
 						room.players[tempsID].cards[card.id] = card;
 						socket.emit('cardDrawn', card);
 					}

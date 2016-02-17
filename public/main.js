@@ -1,11 +1,11 @@
 Number.isInteger = Number.isInteger || function(value) {
-	return typeof value === "number" &&
+	return typeof value === 'number' &&
 		isFinite(value) &&
 		Math.floor(value) === value;
 };
 
-$(function () {
-	$('#submit_name').on('click', function () {
+$(function() {
+	$('#submit_name').on('click', function() {
 		if ($('#name').val().trim() !== '') {
 			var name = $('#name').val();
 			$('body').html('');
@@ -43,21 +43,21 @@ var nameReady = function(name) {
 			console.log(data);
 			renderRoom(data);
 		} else if (data.roomName === currentRoom) {
-			$('#players').append('<li id="player_' + data.id + '">' + data.name + '</li>')
+			$('#players').append('<li id="player_' + data.id + '">' + data.name + '</li>');
 		}
 	});
 
 	function renderRoom(data) {
-		$('#main_container').html(template('room', {roomName: data.roomName, players: data.players, playerId: data.id}));
+		$('#main_container').html(template('room', { roomName: data.roomName, players: data.players, playerId: data.id }));
 
-		$('#ready_btn').on('click', function () {
+		$('#ready_btn').on('click', function() {
 			console.log('clicked');
 			socket.emit('ready');
 			$('#ready_btn').remove();
 		});
 	}
 
-	socket.on('ready', function (data) {
+	socket.on('ready', function(data) {
 		console.log('ready: ' + data.id);
 		if (data.roomName === currentRoom) {
 			console.log($('#player_' + data.id));
@@ -65,7 +65,7 @@ var nameReady = function(name) {
 		}
 	});
 
-	$('#chat').on('keydown', function (e) {
+	$('#chat').on('keydown', function(e) {
 		var message = $('#chat').val();
 
 		if (e.which === 13 && message) {
@@ -79,7 +79,7 @@ var nameReady = function(name) {
 		}
 	});
 
-	$('#join_room').on('click', function () {
+	$('#join_room').on('click', function() {
 		var roomName = $('#room_name').val();
 
 		socket.emit('joinRoom', {
@@ -88,7 +88,7 @@ var nameReady = function(name) {
 		});
 	});
 
-	$('#create_room').on('click', function () {
+	$('#create_room').on('click', function() {
 		var roomName = $('#room_name').val();
 
 		console.log('creating room');
@@ -99,7 +99,7 @@ var nameReady = function(name) {
 		});
 	});
 
-	socket.on('roomStarted', function (data) {
+	socket.on('roomStarted', function(data) {
 		console.log(data.roomName);
 
 		if (data.roomName === currentRoom) {
@@ -120,7 +120,7 @@ var nameReady = function(name) {
 		console.log('joining namespace ' + roomData.roomName);
 		var game = io('/' + roomData.roomName);
 
-		game.on('newTurn', function (data) {
+		game.on('newTurn', function(data) {
 			turnNum = data.turnNum;
 			turnPlayer = data.turnPlayer;
 			console.log('starting new turn');
@@ -128,10 +128,10 @@ var nameReady = function(name) {
 			$('#mana').text(data.mana);
 			if (turnPlayer === socket.id) {
 				console.log('It is this players turn!');
-				if(turnNum === 1){
+				if (turnNum === 1) {
 					game.emit('getFaces');
 				}
-				if(turnNum === 0) {
+				if (turnNum === 0) {
 					console.log('starting game');
 
 					// insert game template
@@ -141,15 +141,14 @@ var nameReady = function(name) {
 					game.emit('drawCard');
 					game.emit('drawCard');
 					game.emit('drawCard');
-				}
-				else {
+				} else {
 					game.emit('drawCard');
 				}
-				$('#end_turn').on('click', function () {
+				$('#end_turn').on('click', function() {
 					$('#end_turn').off('click');
 					game.emit('endTurn');
 				});
-				$('#sacrifice').on('click', function () {
+				$('#sacrifice').on('click', function() {
 					$('#sacrifice').off('click');
 					console.log('Sacrifice beginning!');
 					cardActionState = 'Sacrifice';
@@ -157,26 +156,25 @@ var nameReady = function(name) {
 			}
 		});
 
-		game.on('updateSize', function (sId, value) {
+		game.on('updateSize', function(sId, value) {
 			if (sId === socket.id) {
 				$('#player_cards_in_deck').text(value);
-			}
-			else {
+			} else {
 				$('#opponent_cards_in_deck').text(value);
 			}
 		});
 
-		game.on('cardDrawn', function (data) {
+		game.on('cardDrawn', function(data) {
 			console.log('card drawn');
 			console.log(data);
 
 			if (!data.image) {
-				data.image = 'DEMON.png'
+				data.image = 'DEMON.png';
 			}
 
 			$('.player-hand').append(template('card', data));
 
-			$('#' + data.id).on('click', function () {
+			$('#' + data.id).on('click', function() {
 				console.log('clicked card');
 				if (cardActionState === 'Normal') {
 					if (turnPlayer === socket.id) {
@@ -185,10 +183,9 @@ var nameReady = function(name) {
 							game.emit('mulliganCard', data);
 						} else {
 							if (data.battleRattleTarget) {
-								console.log('getting board size!')
+								console.log('getting board size!');
 								game.emit('getBoardSize', data);
-							}
-							else {
+							} else {
 								game.emit('playCard', data);
 							}
 						}
@@ -197,11 +194,11 @@ var nameReady = function(name) {
 			});
 		});
 
-		game.on('boardSize', function (mine, theirs, data) {
-			console.log('me first!')
-			console.log(mine)
-			console.log(theirs)
-			if (mine == 1 && theirs == 1){
+		game.on('boardSize', function(mine, theirs, data) {
+			console.log('me first!');
+			console.log(mine);
+			console.log(theirs);
+			if (mine == 1 && theirs == 1) {
 				game.emit('playCard', data);
 			} else {
 				cardActionState = 'InBattleRattle';
@@ -210,43 +207,40 @@ var nameReady = function(name) {
 			}
 		});
 
-		game.on('cardMulliganed', function (data) {
+		game.on('cardMulliganed', function(data) {
 			$('#' + data.id).remove();
 		});
 
-		game.on('relicEarned', function (sId, value) {
+		game.on('relicEarned', function(sId, value) {
 			if (sId === socket.id) {
 				$('#player_ritual_pieces').text(value);
-			}
-			else {
+			} else {
 				$('#opponent_ritual_pieces').text(value);
 			}
 		});
 
-    game.on('gameOver', function (sId, value) {
-      if (sId === socket.id) {
-        alert("You won! Congratulations!");
-      }
-      else {
-        alert("You lose! Better luck next time!");
-      }
-    });
+		game.on('gameOver', function(sId, value) {
+			if (sId === socket.id) {
+				alert('You won! Congratulations!');
+			}			else {
+				alert('You lose! Better luck next time!');
+			}
+		});
 
-		game.on('faceDamageEarned', function (sId, value) {
+		game.on('faceDamageEarned', function(sId, value) {
 			if (sId === socket.id) {
 				$('#player_face_damage').text(value);
-			}
-			else {
+			} else {
 				$('#opponent_face_damage').text(value);
 			}
 		});
 
-		game.on('sacrificeComplete', function () {
-			console.log('Sac completed!')
+		game.on('sacrificeComplete', function() {
+			console.log('Sac completed!');
 			cardActionState = 'Normal';
 		});
 
-		game.on('cardPlayed', function (data, mana) {
+		game.on('cardPlayed', function(data, mana) {
 			console.log('cardPlayed');
 			console.log(data);
 			var $board;
@@ -258,21 +252,20 @@ var nameReady = function(name) {
 				$board = $('.opponent-board');
 			}
 			if (!data.image) {
-				data.image = 'dr6.png'
+				data.image = 'dr6.png';
 			}
 			$board.append(template('card', data));
 
 			if (data.type == 'player') {
-				$('#' + data.id).on('click', function () {
+				$('#' + data.id).on('click', function() {
 					if (cardActionState == 'InAttack') {
 						game.emit('attack', selected, data);
 						selected = undefined;
 						cardActionState = 'Normal';
 					}
 				});
-			}
-			else {
-				$('#' + data.id).on('click', function () {
+			} else {
+				$('#' + data.id).on('click', function() {
 					if (cardActionState == 'Normal') {
 						selected = data;
 						cardActionState = 'InAttack';
@@ -285,37 +278,37 @@ var nameReady = function(name) {
 						selected = undefined;
 						cardActionState = 'Normal';
 					} else if (cardActionState == 'Sacrifice') {
-						if (!(data.player === socket.id)){
+						if (!(data.player === socket.id)) {
 							console.log('You can\'t sacrifice your opponents minions! (Nice try :P)');
 						} else if (data.type == 'player') {
 							console.log('You can\'t sacrifice yourself! (Why? Just, why?)');
 						} else {
-						console.log('Sacrificing card');
-						game.emit('sacrifice', data);
-					}
+							console.log('Sacrificing card');
+							game.emit('sacrifice', data);
+						}
 					}
 				});
 			}
 		});
 
-		game.on('cardKilled', function (data) {
+		game.on('cardKilled', function(data) {
 			console.log('card died');
 			$('#' + data.id).remove();
 		});
 
-		game.on('cardDiscarded', function (data) {
+		game.on('cardDiscarded', function(data) {
 			console.log('card discarded');
 			$('#' + data.id).remove();
 		});
 
-		game.on('cardChanged', function (data) {
+		game.on('cardChanged', function(data) {
 			console.log('updating');
-			$('#' + data.id).find("div.stats").find("span#damage").text(data.damage);
-			$('#' + data.id).find("div.stats").find("span#health").text(data.health);
+			$('#' + data.id).find('div.stats').find('span#damage').text(data.damage);
+			$('#' + data.id).find('div.stats').find('span#health').text(data.health);
 		});
 
-		game.on('joinedRoom', function (data) {
+		game.on('joinedRoom', function(data) {
 			console.log(data.roomName);
 		});
 	}
-}
+};

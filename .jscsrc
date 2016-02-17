@@ -3,5 +3,13 @@
 	"validateIndentation": "\t",
 	"requirePaddingNewLinesAfterBlocks": false,
 	"requireTrailingComma": false,
-	"disallowTrailingComma": true
+	"disallowTrailingComma": true,
+	"maximumLineLength": 120,
+	"safeContextKeyword": "self",
+	"requireSpacesInAnonymousFunctionExpression": {
+		"beforeOpeningCurlyBrace": true
+	},
+	"disallowSpacesInAnonymousFunctionExpression": {
+		"beforeOpeningRoundBrace": true,
+	}
 }

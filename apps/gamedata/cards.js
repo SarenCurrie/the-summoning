@@ -21,7 +21,7 @@ var _ = require('underscore');
 // 	}
 // };
 
-module.exports = function (game) {
+module.exports = function(game) {
 	function getCardsFromRoom(card, room) {
 		var opponentId;
 		var opponentCards;
@@ -52,11 +52,11 @@ module.exports = function (game) {
 			game.killCard(target);
 			return;
 		}
-			game.changeCard(target);
+		game.changeCard(target);
 
 	}
 
-	function simpleAttack (room, self, target) {
+	function simpleAttack(room, self, target) {
 
 		damage(room, target, self.damage);
 		damage(room, self, target.damage);
@@ -111,7 +111,7 @@ module.exports = function (game) {
 		// },
 		player1: {
 			name: 'Player1',
-			ident : 'player1',
+			ident: 'player1',
 			mana: 1,
 			damage: 1,
 			health: 1,
@@ -119,32 +119,33 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'player',
 			description: 'THIS IS PLAYER ONE FACE.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
 			},
-			deathCry: function (room) {
+			deathCry: function(room) {
 				var self = this;
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (board) {
+			startOfTurn: function(board) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (board) {
+			endOfTurn: function(board) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				//
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -152,7 +153,7 @@ module.exports = function (game) {
 		},
 		player2: {
 			name: 'Player2',
-			ident : 'player2',
+			ident: 'player2',
 			mana: 1,
 			damage: 1,
 			health: 1,
@@ -160,32 +161,33 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'player',
 			description: 'THIS IS PLAYER TWO FACE.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
 			},
-			deathCry: function (room) {
+			deathCry: function(room) {
 				var self = this;
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (board) {
+			startOfTurn: function(board) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (board) {
+			endOfTurn: function(board) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				//
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -193,7 +195,7 @@ module.exports = function (game) {
 		},
 		wingriderDemon: {
 			name: 'Wingrider Demon',
-			ident : 'wingriderDemon',
+			ident: 'wingriderDemon',
 			image: 'DEMON.png',
 			mana: 1,
 			damage: 2,
@@ -202,35 +204,36 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'Deathcry: Draw a card.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
 			},
-			deathCry: function (room) {
+			deathCry: function(room) {
 				var self = this;
 
 				game.draw(self);
 
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -238,7 +241,7 @@ module.exports = function (game) {
 		},
 		jackalwere: {
 			name: 'Jackalwere',
-			ident : 'jackalwere',
+			ident: 'jackalwere',
 			image: 'DEMON.png',
 			mana: 2,
 			damage: 5,
@@ -247,35 +250,36 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'Deathcry: Draw a card.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
 			},
-			deathCry: function (room) {
+			deathCry: function(room) {
 				var self = this;
 
 				game.draw(self);
 
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -283,7 +287,7 @@ module.exports = function (game) {
 		},
 		kumaraCopter: {
 			name: 'Kumara Copter',
-			ident : 'kumaraCopter',
+			ident: 'kumaraCopter',
 			image: 'knightgirl.png',
 			mana: 1,
 			damage: 2,
@@ -293,54 +297,56 @@ module.exports = function (game) {
 			type: 'minion',
 			description: 'Battlerattle: Target minion gains +8/+0 this turn.',
 			battleRattleTarget: true,
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				if (target) {
 					target.damage += 8;
 					this.debuff = target;
 					game.changeCard(target);
 				}
-			 		//
-				},
-			deathCry: function (room) {
+
+				//
+			},
+			deathCry: function(room) {
 				var self = this;
 				game.itsReallyOver(self);
 
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
-				if (effect == 'cleanup'){
-				if (self.debuff){
-					var debuffed = self.debuff
-					if (debuffed){
-					debuffed.damage -= 8;
-					game.changeCard(debuffed);
+				if (effect == 'cleanup') {
+					if (self.debuff) {
+						var debuffed = self.debuff;
+						if (debuffed) {
+							debuffed.damage -= 8;
+							game.changeCard(debuffed);
+						}
+						self.debuff = undefined;
+					}
 				}
-					self.debuff = undefined;
-				}
-			}
+
 				//
 			}
 
 		},
 		summoningStone: {
 			name: 'Summoning Stone',
-			ident : 'summoningStone',
+			ident: 'summoningStone',
 			image: 'dr6.png',
 			mana: 1,
 			damage: 6,
@@ -349,32 +355,34 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'EoT: Summon a Sleeping Statue.',
-			battleRattle: function (room, target) {
-				var self = this;
-
-				//
-				},
-			deathCry: function (room) {
-				var self = this;
-      	game.itsReallyOver(self);
-				//
-			},
-			startOfTurn: function (room) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			deathCry: function(room) {
 				var self = this;
-				game.summonCard(self, cards['sleepingStatue']);
+				game.itsReallyOver(self);
+
 				//
 			},
-			attack: function (room, target) {
+			startOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function(room) {
+				var self = this;
+				game.summonCard(self, cards.sleepingStatue);
+
+				//
+			},
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -383,7 +391,7 @@ module.exports = function (game) {
 		},
 		sleepingStatue: {
 			name: 'Sleeping Statue',
-			ident : 'sleepingStatue',
+			ident: 'sleepingStatue',
 			image: 'zand.png',
 			mana: 0,
 			damage: 0,
@@ -392,32 +400,33 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: '-.-',
-			battleRattle: function (room, target) {
-				var self = this;
-
-				//
-				},
-			deathCry: function (room) {
-				var self = this;
-        game.itsReallyOver(self);
-				//
-			},
-			startOfTurn: function (room) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			deathCry: function(room) {
+				var self = this;
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -426,7 +435,7 @@ module.exports = function (game) {
 		},
 		mummyLord: {
 			name: 'Mummy Lord',
-			ident : 'mummyLord',
+			ident: 'mummyLord',
 			image: 'zand.png',
 			mana: 4,
 			damage: 6,
@@ -435,35 +444,36 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'Whenever one of your minions die in combat, summon a 2/2 Lil\' Mummy.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
-				},
-			deathCry: function (room) {
+			},
+			deathCry: function(room) {
 				var self = this;
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
-				if (effect == 'death'){
-					game.summonCard(self, cards['lilMummy']);
+				if (effect == 'death') {
+					game.summonCard(self, cards.lilMummy);
 				}
 
 				//
@@ -472,7 +482,7 @@ module.exports = function (game) {
 		},
 		lilMummy: {
 			name: 'Lil\' Mummy',
-			ident : 'lilMummy',
+			ident: 'lilMummy',
 			image: 'zand.png',
 			mana: 0,
 			damage: 2,
@@ -483,32 +493,33 @@ module.exports = function (game) {
 			type: 'minion',
 
 			description: 'Not as cute as the name suggests.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
-				},
-			deathCry: function (room) {
+			},
+			deathCry: function(room) {
 				var self = this;
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -517,7 +528,7 @@ module.exports = function (game) {
 		},
 		skeletalSandworm: {
 			name: 'Skeletal Sandworm',
-			ident : 'skeletalSandworm',
+			ident: 'skeletalSandworm',
 			image: 'zand.png',
 			mana: 4,
 			damage: 8,
@@ -526,36 +537,37 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'Deathcry: Draw a card. If sacrificed, draw 2.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
-				},
-			deathCry: function (room) {
+			},
+			deathCry: function(room) {
 				var self = this;
 				game.draw(self);
-				if (self.causeOfDeath == 'sacrifice'){
+				if (self.causeOfDeath == 'sacrifice') {
 					game.draw(self);
 				}
-        game.itsReallyOver(self);
+				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -564,7 +576,7 @@ module.exports = function (game) {
 		},
 		theHarbinger: {
 			name: 'The Harbinger',
-			ident : 'theHarbinger',
+			ident: 'theHarbinger',
 			image: 'zand.png',
 			mana: 4,
 			damage: 0,
@@ -573,42 +585,43 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'SoT: Destroy ALL minions.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
-				},
-			deathCry: function (room) {
+			},
+			deathCry: function(room) {
 				var self = this;
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 				for (var key in room.players) {
-				for (var key2 in room.players[key].board) {
-					var card = room.players[key].board[key2];
-					if (self.id != card.id){
-					if (card.type != 'player'){
-					game.killCard(card);
+					for (var key2 in room.players[key].board) {
+						var card = room.players[key].board[key2];
+						if (self.id != card.id) {
+							if (card.type != 'player') {
+								game.killCard(card);
+							}
+						}
+					}
 				}
-				}
-				}
-			}
 				game.killCard(self); // Sudoku. ;_;
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -617,7 +630,7 @@ module.exports = function (game) {
 		},
 		masonsApprentice: {
 			name: 'Mason\'s Apprentice',
-			ident : 'masonsApprentice',
+			ident: 'masonsApprentice',
 			image: 'zand.png',
 			mana: 2,
 			damage: 4,
@@ -626,33 +639,34 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'Deathcry: Summon a Sleeping Statue.',
-			battleRattle: function (room, target) {
-				var self = this;
-
-				//
-				},
-			deathCry: function (room) {
-				var self = this;
-				game.summonCard(self, cards['sleepingStatue']);
-        game.itsReallyOver(self);
-				//
-			},
-			startOfTurn: function (room) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			deathCry: function(room) {
+				var self = this;
+				game.summonCard(self, cards.sleepingStatue);
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -661,7 +675,7 @@ module.exports = function (game) {
 		},
 		masterMason: {
 			name: 'Master Mason',
-			ident : 'masterMason',
+			ident: 'masterMason',
 			image: 'zand.png',
 			mana: 3,
 			damage: 5,
@@ -670,32 +684,34 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'Battlerattle: Summon a Sleeping Statue.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
-				game.summonCard(self, cards['sleepingStatue']);
-				//
-				},
-			deathCry: function (room) {
-				var self = this;
-        game.itsReallyOver(self);
+				game.summonCard(self, cards.sleepingStatue);
+
 				//
 			},
-			startOfTurn: function (room) {
+			deathCry: function(room) {
+				var self = this;
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -704,7 +720,7 @@ module.exports = function (game) {
 		},
 		manicMerchant: {
 			name: 'Manic Merchant',
-			ident : 'manicMerchant',
+			ident: 'manicMerchant',
 			image: 'zand.png',
 			mana: 1,
 			damage: 8,
@@ -713,33 +729,35 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'Battlerattle: Draw a card. Deathcry: Deal 5 damage to yourself.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 				game.draw(self);
+
 				//
-				},
-			deathCry: function (room) {
+			},
+			deathCry: function(room) {
 				var self = this;
 				game.earnDamage(self, 5, true);
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -748,7 +766,7 @@ module.exports = function (game) {
 		},
 		dustWight: {
 			name: 'Dust Wight',
-			ident : 'dustWight',
+			ident: 'dustWight',
 			image: 'zand.png',
 			mana: 3,
 			damage: 8,
@@ -757,34 +775,35 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'If this minion is sacrificed, summon a Dust Wight at EoT.',
-			battleRattle: function (room, target) {
-				var self = this;
-
-				//
-				},
-			deathCry: function (room) {
-				var self = this;
-        game.itsReallyOver(self);
-				//
-			},
-			startOfTurn: function (room) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			deathCry: function(room) {
+				var self = this;
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
-				if (effect == 'cleanup'){
-					if (this.causeOfDeath == 'sacrifice'){
+			onEvent: function(room, effect, card) {
+				if (effect == 'cleanup') {
+					if (this.causeOfDeath == 'sacrifice') {
 						game.summonCard(this, cards.dustWight);
 					}
 				}
@@ -793,7 +812,7 @@ module.exports = function (game) {
 		},
 		suspiciousStatue: {
 			name: 'Suspicious Statue',
-			ident : 'suspiciousStatue',
+			ident: 'suspiciousStatue',
 			image: 'zand.png',
 			mana: 1,
 			damage: 0,
@@ -802,7 +821,7 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'Battlerattle: Summon the leftmost 2 mana minion in your hand.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 				for (var key in room.players[self.player].cards) {
 					if (room.players[self.player].cards[key].mana == 2) {
@@ -811,29 +830,31 @@ module.exports = function (game) {
 						return;
 					}
 				}
+
 				//
-				},
-			deathCry: function (room) {
+			},
+			deathCry: function(room) {
 				var self = this;
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -842,7 +863,7 @@ module.exports = function (game) {
 		},
 		cunningCobra: {
 			name: 'Cunning Cobra',
-			ident : 'cunningCobra',
+			ident: 'cunningCobra',
 			image: 'cobra.png',
 			mana: 2,
 			damage: 4,
@@ -852,38 +873,39 @@ module.exports = function (game) {
 			type: 'minion',
 			battleRattleTarget: true,
 			description: 'Battlerattle: Deal 4 damage to a minion. If it kills the minion, draw a card.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
-				if (target){
-				if (target.health <= 4){
-					game.draw(self);
+				if (target) {
+					if (target.health <= 4) {
+						game.draw(self);
+					}
+					damage(room, target, 4);
 				}
-				damage(room, target, 4);
-				}
-
-				//
-				},
-			deathCry: function (room) {
-				var self = this;
-        game.itsReallyOver(self);
-				//
-			},
-			startOfTurn: function (room) {
-				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			deathCry: function(room) {
+				var self = this;
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -892,7 +914,7 @@ module.exports = function (game) {
 		},
 		desertMarauder: {
 			name: 'Desert Marauder',
-			ident : 'desertMarauder',
+			ident: 'desertMarauder',
 			image: 'maraudererer.png',
 			mana: 2,
 			damage: 5,
@@ -902,33 +924,34 @@ module.exports = function (game) {
 			type: 'minion',
 			battleRattleTarget: true,
 			description: 'Battlerattle: Deal damage to a minion equal to x2 the number of minions on your board.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 				if (target) {
-				damage(room, target, (_.size(room.players[self.player].board)-1)*2);
+					damage(room, target, (_.size(room.players[self.player].board) - 1) * 2);
 				}
-				},
-			deathCry: function (room) {
+			},
+			deathCry: function(room) {
 				var self = this;
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -937,7 +960,7 @@ module.exports = function (game) {
 		},
 		locustSwarm: {
 			name: 'Locust Swarm',
-			ident : 'locustSwarm',
+			ident: 'locustSwarm',
 			image: 'swarm.png',
 			mana: 2,
 			damage: 6,
@@ -946,35 +969,36 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'When this minion is sacrificed return it to your hand.',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
-				},
-			deathCry: function (room) {
+			},
+			deathCry: function(room) {
 				var self = this;
-				if (self.causeOfDeath == 'sacrifice'){
-				game.draw(self, ['locustSwarm']);
+				if (self.causeOfDeath == 'sacrifice') {
+					game.draw(self, ['locustSwarm']);
 				}
 				game.itsReallyOver(self);
+
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
@@ -983,7 +1007,7 @@ module.exports = function (game) {
 		},
 		wingridersDemon: {
 			name: 'Wingridersssssss Demon',
-			ident : 'wingridersDemon',
+			ident: 'wingridersDemon',
 			image: 'DEMON.png',
 			mana: 1,
 			damage: 0,
@@ -992,33 +1016,33 @@ module.exports = function (game) {
 			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'VALUE',
-			battleRattle: function (room, target) {
+			battleRattle: function(room, target) {
 				var self = this;
 
 				//
 			},
-			deathCry: function (room) {
+			deathCry: function(room) {
 				var self = this;
 				game.itsReallyOver(self);
 
 				//
 			},
-			startOfTurn: function (room) {
+			startOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			endOfTurn: function (room) {
+			endOfTurn: function(room) {
 				var self = this;
 
 				//
 			},
-			attack: function (room, target) {
+			attack: function(room, target) {
 				var self = this;
 
 				simpleAttack(room, self, target);
 			},
-			onEvent: function (room, effect, card) {
+			onEvent: function(room, effect, card) {
 				var self = this;
 
 				//
