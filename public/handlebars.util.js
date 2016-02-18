@@ -1,16 +1,16 @@
 var cache = {};
 
 Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
-    if (arguments.length < 3)
-        throw new Error("Handlebars Helper equal needs 2 parameters");
-    if( lvalue!=rvalue ) {
-        return options.inverse(this);
-    } else {
-        return options.fn(this);
-    }
+	if (arguments.length < 3)
+	throw new Error('Handlebars Helper equal needs 2 parameters');
+	if (lvalue != rvalue) {
+		return options.inverse(this);
+	} else {
+		return options.fn(this);
+	}
 });
 
-Handlebars.registerHelper('socketId', function (id) {
+Handlebars.registerHelper('socketId', function(id) {
 	if (arguments.length < 2)
 		throw new Error('Handlebars Helper socketId needs 1 parameter');
 	if (id.startsWith('/#')) {
@@ -18,23 +18,23 @@ Handlebars.registerHelper('socketId', function (id) {
 	} else {
 		return id;
 	}
-})
+});
 
-function template(name, data){
-	var _template, result;
+function template(name, data) {
+	var _template;
+	var result;
 
-	if(cache[name]){
+	if (cache[name]) {
 		_template = cache[name];
-	}
-	else {
+	} else {
 		$.ajax({
 			url: 'templates/' + name + '.html',
 			dataType: 'text',
 			async: false,
-			success: function(result){
+			success: function(result) {
 				_template = result;
 			},
-			error: function(xhr, status, err){
+			error: function(xhr, status, err) {
 				_template = status + ': ' + err;
 			}
 		});
