@@ -39,6 +39,7 @@ module.exports = function(game) {
 	}
 
 	var cards = {
+		// Standard card with race and class.
 		elfRanger: {
 			name: 'Elf Ranger',
 			ident: 'elfRanger',
@@ -54,27 +55,18 @@ module.exports = function(game) {
 			description: 'Deathcry: Draw a card.',
 			battleRattle: function(room, target) {
 				var self = this;
-
-				//
 			},
 			deathCry: function(room) {
 				var self = this;
 
 				game.draw(self);
-
 				game.itsReallyOver(self);
-
-				//
 			},
 			startOfTurn: function(room) {
 				var self = this;
-
-				//
 			},
 			endOfTurn: function(room) {
 				var self = this;
-
-				//
 			},
 			attack: function(room, target) {
 				var self = this;
@@ -83,10 +75,9 @@ module.exports = function(game) {
 			},
 			onEvent: function(room, effect, card) {
 				var self = this;
-
-				//
 			}
 		},
+		// Standard card with different race and class
 		humanWarrior: {
 			name: 'Human Warrior',
 			ident: 'humanWarrior',
@@ -107,24 +98,17 @@ module.exports = function(game) {
 					this.debuff = target;
 					game.changeCard(target);
 				}
-
-				//
 			},
 			deathCry: function(room) {
 				var self = this;
-				game.itsReallyOver(self);
 
-				//
+				game.itsReallyOver(self);
 			},
 			startOfTurn: function(room) {
 				var self = this;
-
-				//
 			},
 			endOfTurn: function(room) {
 				var self = this;
-
-				//
 			},
 			attack: function(room, target) {
 				var self = this;
@@ -143,10 +127,9 @@ module.exports = function(game) {
 						self.debuff = undefined;
 					}
 				}
-
-				//
 			}
 		},
+		// Standard card with effect related to race
 		humanPriest: {
 			name: 'Human Priest',
 			ident: 'humanPriest',
@@ -157,21 +140,18 @@ module.exports = function(game) {
 			damage: 6,
 			health: 6,
 			attacks: 0,
-			causeOfDeath: 'notDead', 
+			causeOfDeath: 'notDead',
 			type: 'minion',
 			description: 'Give all friendly Humans +1 health at the start of each turn.',
 			battleRattle: function(room, target) {
 				var self = this;
-
-				//
 			},
 			deathCry: function(room) {
 				var self = this;
 				game.itsReallyOver(self);
-
-				//
 			},
 			startOfTurn: function(room) {
+				// Race effect
 				var self = this;
 				var playerCards = getCardsFromRoom(self, room).player;
 
@@ -185,8 +165,6 @@ module.exports = function(game) {
 			},
 			endOfTurn: function(room) {
 				var self = this;
-
-				//
 			},
 			attack: function(room, target) {
 				var self = this;
@@ -195,8 +173,6 @@ module.exports = function(game) {
 			},
 			onEvent: function(room, effect, card) {
 				var self = this;
-
-				//
 			}
 		}
 	};
