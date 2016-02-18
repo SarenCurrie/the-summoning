@@ -193,10 +193,10 @@ module.exports = function(game) {
 				//
 			}
 		},
-		wingriderDemon: {
-			name: 'Wingrider Demon',
-			ident: 'wingriderDemon',
-			image: 'DEMON.png',
+		trappedAdventurer: {
+			name: 'Trapped Adventurer',
+			ident: 'trappedAdventurer',
+			image: 'trapped.png',
 			mana: 1,
 			damage: 2,
 			health: 3,
@@ -285,11 +285,11 @@ module.exports = function(game) {
 				//
 			}
 		},
-		kumaraCopter: {
-			name: 'Kumara Copter',
-			ident: 'kumaraCopter',
-			image: 'knightgirl.png',
-			mana: 1,
+		acolyteOfTheSun: {
+			name: 'Acolyte of the Sun',
+			ident: 'acolyteOfTheSun',
+			image: 'acolyte.png',
+			mana: 3,
 			damage: 2,
 			health: 8,
 			attacks: 0,
@@ -348,7 +348,7 @@ module.exports = function(game) {
 			name: 'Summoning Stone',
 			ident: 'summoningStone',
 			image: 'dr6.png',
-			mana: 1,
+			mana: 3,
 			damage: 6,
 			health: 6,
 			attacks: 0,
@@ -433,6 +433,377 @@ module.exports = function(game) {
 			}
 
 		},
+		valhallaRedeemer: {
+			name: 'Valhalla Redeemer',
+			ident: 'valhallaRedeemer',
+			image: 'reddemer.png',
+			mana: 7,
+			damage: 14,
+			health: 16,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'EoT: Resummon all minions sacrificed this turn.',
+			battleRattle: function(room, target) {
+				var self = this;
+
+				//
+			},
+			deathCry: function(room) {
+				var self = this;
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function(room) {
+				var self = this;
+				for (var i in room.graveyard) {
+					if (room.graveyard[i].player == self.player){
+						if (room.graveyard[i].causeOfDeath == 'sacrifice'){
+							game.summonCard(self, cards[room.graveyard[i].ident]);
+						}
+					}
+				}
+				//
+			},
+			attack: function(room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function(room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		astralOfTheSun: {
+			name: 'Astral of the Sun',
+			ident: 'astralOfTheSun',
+			image: 'astral.png',
+			mana: 8,
+			damage: 18,
+			health: 16,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Sacrifice requires one less minion.',
+			battleRattle: function(room, target) {
+				var self = this;
+				room.players[self.player].sacModifier += -1;
+				//
+			},
+			deathCry: function(room) {
+				var self = this;
+				room.players[self.player].sacModifier += 1;
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function(room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		sandShaper: {
+			name: 'Sand Shaper',
+			ident: 'sandShaper',
+			image: 'zand.png',
+			mana: 6,
+			damage: 10,
+			health: 10,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Deathcry: Summon 6 Sleeping Statue\'s',
+			battleRattle: function(room, target) {
+				var self = this;
+
+				//
+			},
+			deathCry: function(room) {
+				var self = this;
+				for (i = 0; i < 6; i++) {
+					game.summonCard(self,cards.sleepingStatue);
+				}
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function(room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		ferociousCamel: {
+			name: 'Ferocious Camel',
+			ident: 'ferociousCamel',
+			image: 'zand.png',
+			mana: 6,
+			damage: 7,
+			health: 7,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Battlerattle: Summon ANOTHER Ferocious Camel.',
+			battleRattle: function(room, target) {
+				var self = this;
+				game.summonCard(self, cards.ferociousCamel);
+				//
+			},
+			deathCry: function(room) {
+				var self = this;
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function(room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		basilisk: {
+			name: 'Basilisk',
+			ident: 'basilisk',
+			image: 'zand.png',
+			mana: 5,
+			damage: 8,
+			health: 8,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			battleRattleTarget: true,
+			description: 'Battlerattle: Destroy target minion.',
+			battleRattle: function(room, target) {
+				var self = this;
+				game.killCard(target);
+				//
+			},
+			deathCry: function(room) {
+				var self = this;
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function(room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		priestessOfTheSun: {
+			name: 'Priestess of the Sun',
+			ident: 'priestessOfTheSun',
+			image: 'zand.png',
+			mana: 5,
+			damage: 10,
+			health: 12,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Battlerattle: Draw a card for each minion you have on board.',
+			battleRattle: function(room, target) {
+				var self = this;
+				for (var key in room.players[self.player].board) {
+					game.draw(self);
+				}
+				//
+			},
+			deathCry: function(room) {
+				var self = this;
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function(room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
+		oasisDjinni: {
+			name: 'Oasis Djinni',
+			ident: 'oasisDjinni',
+			image: 'oasis.png',
+			mana: 5,
+			damage: 9,
+			health: 13,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Whenever you sacrifice minions, draw a card for each ritual piece you have afterwards.',
+			battleRattle: function(room, target) {
+				var self = this;
+
+				//
+			},
+			deathCry: function(room) {
+				var self = this;
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function(room, effect, card) {
+				var self = this;
+				if (effect == 'sacrifice') {
+					for (i = 0; i < room.players[self.player].relics; i++) {
+    				game.draw(self);
+					}
+				}
+				//
+			}
+
+		},
+		dustGolem: {
+			name: 'Dust Golem',
+			ident: 'dustGolem',
+			image: 'zand.png',
+			mana: 5,
+			damage: 12,
+			health: 6,
+			attacks: 0,
+			causeOfDeath: 'notDead',
+			type: 'minion',
+			description: 'Deathcry: Summon 2 Sleeping Statue\'s',
+			battleRattle: function(room, target) {
+				var self = this;
+
+				//
+			},
+			deathCry: function(room) {
+				var self = this;
+				game.summonCard(self, cards.sleepingStatue);
+				game.summonCard(self, cards.sleepingStatue);
+				game.itsReallyOver(self);
+
+				//
+			},
+			startOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			endOfTurn: function(room) {
+				var self = this;
+
+				//
+			},
+			attack: function(room, target) {
+				var self = this;
+
+				simpleAttack(room, self, target);
+			},
+			onEvent: function(room, effect, card) {
+				var self = this;
+
+				//
+			}
+
+		},
 		mummyLord: {
 			name: 'Mummy Lord',
 			ident: 'mummyLord',
@@ -491,7 +862,6 @@ module.exports = function(game) {
 			token: true,
 			causeOfDeath: 'notDead',
 			type: 'minion',
-
 			description: 'Not as cute as the name suggests.',
 			battleRattle: function(room, target) {
 				var self = this;
@@ -722,7 +1092,7 @@ module.exports = function(game) {
 			name: 'Manic Merchant',
 			ident: 'manicMerchant',
 			image: 'zand.png',
-			mana: 1,
+			mana: 3,
 			damage: 8,
 			health: 7,
 			attacks: 0,
@@ -1004,49 +1374,6 @@ module.exports = function(game) {
 				//
 			}
 
-		},
-		wingridersDemon: {
-			name: 'Wingridersssssss Demon',
-			ident: 'wingridersDemon',
-			image: 'DEMON.png',
-			mana: 1,
-			damage: 0,
-			health: 100,
-			attacks: 0,
-			causeOfDeath: 'notDead',
-			type: 'minion',
-			description: 'VALUE',
-			battleRattle: function(room, target) {
-				var self = this;
-
-				//
-			},
-			deathCry: function(room) {
-				var self = this;
-				game.itsReallyOver(self);
-
-				//
-			},
-			startOfTurn: function(room) {
-				var self = this;
-
-				//
-			},
-			endOfTurn: function(room) {
-				var self = this;
-
-				//
-			},
-			attack: function(room, target) {
-				var self = this;
-
-				simpleAttack(room, self, target);
-			},
-			onEvent: function(room, effect, card) {
-				var self = this;
-
-				//
-			}
 		}
 	};
 

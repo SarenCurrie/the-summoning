@@ -2,6 +2,7 @@ var _ = require('underscore');
 var id = require('./util/idHandler');
 var cards = require('./gamedata/cards');
 var uuid = require('node-uuid');
+var decks = require('./gamedata/decks');
 
 var createGame = function(io, room) {
 	console.log('creating namespace ' + room.roomName);
@@ -33,6 +34,7 @@ var createGame = function(io, room) {
 		room.players[sId].faces = null;
 		room.players[sId].deck = [];
 		room.players[sId].mullcards = [];
+		room.players[sId].sacModifier = 0;
 
 		var cardSet = cards({
 			summonCard: function(summoner, summonee) {
@@ -100,36 +102,17 @@ var createGame = function(io, room) {
 		});
 
 		//this is kind of a patchy fix for players also being minions. TODO!
+		var decksToLoad = decks();
+		var sacDeck = decksToLoad.sacrifice;
+		var shuffledDeck = _.shuffle(sacDeck.cards);
 		for (var i = 0; i < 30; i++) {
-			while (true) {
-				var num = Math.floor(Math.random() * (_.size(cardSet)));
-				var count = 0;
-				var cardFound = false;
-				for (var key in cardSet) {
-					if (count == num) {
-						if (cardSet[key].type == 'player') {
-							break;
-						}
-						if (cardSet[key].token) {
-							break;
-						}
-						if (cardSet[key].name == 'Sleeping Statue') {
-							break;
-						}
-						var cardId = uuid.v4();
-						var card = {};
-						_.extend(card, cardSet[key], { player: sId, id: cardId });
-						room.players[sId].deck[i]  = card;
-						cardFound = true;
-					}
-					count += 1;
-				}
-				if (cardFound == true) {
-					if (i < 3) {
-						room.players[sId].mullcards[i] = room.players[sId].deck[i].id;
-					}
-					break;
-				}
+			var nextCard = cardSet[shuffledDeck[i]];
+			var cardId = uuid.v4();
+			var card = {};
+			_.extend(card, nextCard, { player: sId, id: cardId });
+			room.players[sId].deck[i]  = card;
+			if (i < 3) {
+				room.players[sId].mullcards[i] = room.players[sId].deck[i].id;
 			}
 		}
 		console.log('printing deck!');
@@ -357,7 +340,7 @@ var createGame = function(io, room) {
 			sacrificedMinions.push(data);
 			console.log('Deathrow is:');
 			console.log(sacrificedMinions);
-			if (_.size(sacrificedMinions) > 1) {
+			if (_.size(sacrificedMinions) == (sacrificeRequirement[room.players[player].relics] + room.players[player].sacModifier)) {
 				room.players[player].relics += 1;
 				console.log('relic earned!');
 				game.emit('relicEarned', player, room.players[player].relics);
@@ -374,6 +357,9 @@ var createGame = function(io, room) {
 					var deadCard = room.players[card.player].board[minion.id];
 					room.graveyard.push(deadCard);
 					room.players[card.player].board[minion.id].deathCry(room);
+				}
+				for (var key in room.players[card.player].board) {
+					room.players[card.player].board[key].onEvent(room, 'sacrifice');
 				}
 				sacrificedMinions = [];
 				socket.emit('sacrificeComplete');
