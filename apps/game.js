@@ -62,9 +62,16 @@ var createGame = function(io, room) {
 				room.graveyard.push(deadCard);
 				room.players[card.player].board[card.id].deathCry(room);
 
-				// Remember to edit this for both sides.
-				for (var key in room.players[card.player].board) {
-					room.players[card.player].board[key].onEvent(room, 'death');
+				// Let other cards know that a card died
+				for (var cId in room.players[player1].board) {
+					if (room.players[player1].board.hasOwnProperty(cId)) {
+						card.onEvent(room, 'death', room.players[card.player].board[card.id]);
+					}
+				}
+				for (var cId in room.players[player2].board) {
+					if (room.players[player2].board.hasOwnProperty(card)) {
+						card.onEvent(room, 'death', room.players[card.player].board[card.id]);
+					}
 				}
 			},
 
@@ -296,6 +303,18 @@ var createGame = function(io, room) {
 			delete room.players[sId].cards[data.id];
 
 			game.emit('cardPlayed', data, mana);
+
+			// Let other cards know that a card was played
+			for (var card in room.players[player1].board) {
+				if (room.players[player1].board.hasOwnProperty(card)) {
+					card.onEvent(room, 'cardPlayed', room.players[sId].board[data.id]);
+				}
+			}
+			for (var card in room.players[player2].board) {
+				if (room.players[player2].board.hasOwnProperty(card)) {
+					card.onEvent(room, 'cardPlayed', room.players[sId].board[data.id]);
+				}
+			}
 
 			if (target) {
 				activateBR(data, target);
