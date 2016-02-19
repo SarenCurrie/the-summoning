@@ -23,19 +23,20 @@ var _ = require('underscore');
 
 module.exports = function(game) {
 	var decks = {
-    sacrifice: {
-    cards: ['suspiciousStatue','trappedAdventurer','trappedAdventurer',
-            'desertMarauder','cunningCobra','locustSwarm',
-            'jackalwere','jackalwere','masonsApprentice',
-            'masonsApprentice','masterMason','masterMason',
-            'summoningStone','manicMerchant','acolyteOfTheSun',
-            'acolyteOfTheSun','dustWight','theHarbinger',
-            'mummyLord','skeletalSandworm','skeletalSandworm',
-            'dustGolem','oasisDjinni','oasisDjinni',
-            'priestessOfTheSun','basilisk','ferociousCamel',
-            'sandShaper','valhallaRedeemer','astralOfTheSun'
-          ]
-        }
+		sacrifice: {
+			cards: [
+				'suspiciousStatue', 'trappedAdventurer', 'trappedAdventurer',
+				'desertMarauder', 'cunningCobra', 'locustSwarm',
+				'jackalwere', 'jackalwere', 'masonsApprentice',
+				'masonsApprentice', 'masterMason', 'masterMason',
+				'summoningStone', 'manicMerchant', 'acolyteOfTheSun',
+				'acolyteOfTheSun', 'dustWight', 'theHarbinger',
+				'mummyLord', 'skeletalSandworm', 'skeletalSandworm',
+				'dustGolem', 'oasisDjinni', 'oasisDjinni',
+				'priestessOfTheSun', 'basilisk', 'ferociousCamel',
+				'sandShaper', 'valhallaRedeemer', 'astralOfTheSun'
+			]
+		}
 	};
 
 	return decks;
