@@ -27,7 +27,11 @@ var createServer = function() {
 		console.log('a user connected');
 
 		socket.on('joinServer', function(data) {
-			chat(socket, io);
+			var globalChat = chat(socket, io);
+
+			globalChat.playerMessage('Welcome')
+			globalChat.allMessage(data.name + ' joined.')
+
 			var theLobby = lobby(socket, io);
 
 			theLobby.addPlayer(id(socket.id), data.name);

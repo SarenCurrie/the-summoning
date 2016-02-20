@@ -26,7 +26,7 @@ var nameReady = function(name) {
 	var currentRoom;
 
 	socket.on('chatMessage', function(data) {
-		$('.chat-box').append('<p>' + data.name + ': ' + data.message);
+		$('.chat-box').append('<p>' + data.name + ': ' + data.message + '</p>');
 	});
 
 	socket.on('createdRoom', function(data) {
@@ -119,6 +119,26 @@ var nameReady = function(name) {
 	function joinGame(roomData) {
 		console.log('joining namespace ' + roomData.roomName);
 		var game = io('/' + roomData.roomName);
+
+		game.on('chatMessage', function(data) {
+			console.log('recieved chat');
+			$('.chat-box').append('<p>' + data.name + ': ' + data.message + '</p>');
+		});
+
+		$('#chat').off('keydown');
+		$('#chat').on('keydown', function(e) {
+			var message = $('#chat').val();
+
+			if (e.which === 13 && message) {
+				game.emit('chatMessage', {
+					name: name,
+					message: message
+				});
+
+				$('#chat').val('');
+				$('.chat-box').append('<p>' + name + ': ' + message + '</p>');
+			}
+		});
 
 		game.on('newTurn', function(data) {
 			turnNum = data.turnNum;
