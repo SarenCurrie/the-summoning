@@ -844,6 +844,7 @@ module.exports = function(game) {
 			onEvent: function(room, effect, card) {
 				var self = this;
 				if (effect == 'death') {
+					
 					game.summonCard(self, cards.lilMummy);
 				}
 
