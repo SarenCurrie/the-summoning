@@ -1,5 +1,5 @@
 var _ = require('underscore');
-
+var wildsCards = require('./sets/theWilds');
 // Card = function(obj) {
 // 	this.name = obj.name;
 // 	this.mana = obj.mana;
@@ -1377,6 +1377,11 @@ module.exports = function(game) {
 
 		}
 	};
+
+	cards = _.extend(cards, wildsCards());
+
+	console.log('CARDS AVAILABLE');
+	console.log(cards);
 
 	return cards;
 };
