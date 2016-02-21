@@ -19,15 +19,43 @@ var nameReady = function(name) {
 	var socket = io();
 	var socketId;
 
+	function setUpChat(socket) {
+		socket.on('chatMessage', function(data) {
+			console.log('recieved chat');
+			var color = data.color || '#000';
+			if (data.source === 'error') {
+				$('.chat-box').append('<p class="error-message">' + data.message + '</p>');
+			}
+			else if (data.source === 'server') {
+				$('.chat-box').append('<p class="game-message">' + data.message + '</p>');
+			}
+			else {
+				$('.chat-box').append('<p class="chat-message"><span class="chat-user" style="color: ' + color + '">' + data.name + ':</span> ' + data.message + '</p>');
+			}
+		});
+
+		$('#chat').off('keydown');
+		$('#chat').on('keydown', function(e) {
+			var message = $('#chat').val();
+
+			if (e.which === 13 && message) {
+				socket.emit('chatMessage', {
+					name: name,
+					message: message
+				});
+
+				$('#chat').val('');
+			}
+		});
+	}
+
 	socket.emit('joinServer', {
 		name: name
 	});
 
 	var currentRoom;
 
-	socket.on('chatMessage', function(data) {
-		$('.chat-box').append('<p>' + data.name + ': ' + data.message + '</p>');
-	});
+	setUpChat(socket);
 
 	socket.on('createdRoom', function(data) {
 		console.log(data);
@@ -62,20 +90,6 @@ var nameReady = function(name) {
 		if (data.roomName === currentRoom) {
 			console.log($('#player_' + data.id));
 			$('#player_' + data.id).append(' <i class="fa fa-check"></i>');
-		}
-	});
-
-	$('#chat').on('keydown', function(e) {
-		var message = $('#chat').val();
-
-		if (e.which === 13 && message) {
-			socket.emit('chatMessage', {
-				name: name,
-				message: message
-			});
-
-			$('#chat').val('');
-			$('.chat-box').append('<p>' + name + ': ' + message);
 		}
 	});
 
@@ -120,25 +134,7 @@ var nameReady = function(name) {
 		console.log('joining namespace ' + roomData.roomName);
 		var game = io('/' + roomData.roomName);
 
-		game.on('chatMessage', function(data) {
-			console.log('recieved chat');
-			$('.chat-box').append('<p>' + data.name + ': ' + data.message + '</p>');
-		});
-
-		$('#chat').off('keydown');
-		$('#chat').on('keydown', function(e) {
-			var message = $('#chat').val();
-
-			if (e.which === 13 && message) {
-				game.emit('chatMessage', {
-					name: name,
-					message: message
-				});
-
-				$('#chat').val('');
-				$('.chat-box').append('<p>' + name + ': ' + message + '</p>');
-			}
-		});
+		setUpChat(game);
 
 		game.on('newTurn', function(data) {
 			turnNum = data.turnNum;

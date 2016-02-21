@@ -2,6 +2,21 @@
 	font-weight: bold;
 }
 
+/* CHAT */
+div.chat-box .error-message {
+	font-weight: bold;
+	color: #C21515;
+}
+
+div.chat-box .game-message {
+	font-style: italic;
+	color: #208075;
+}
+
+div.chat-box .chat-user {
+	font-weight: bold;
+}
+
 .cards {
 	height: 250px;
 	width: 1055px;

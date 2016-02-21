@@ -1,7 +1,7 @@
 var createChatServer = function(socket, io) {
 	socket.on('chatMessage', function(data) {
-		console.log(data.message);
-		socket.broadcast.emit('chatMessage', {
+		console.log(data);
+		io.emit('chatMessage', {
 			source: 'player',
 			name: data.name,
 			message: data.message
