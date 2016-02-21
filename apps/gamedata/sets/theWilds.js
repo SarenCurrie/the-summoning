@@ -1,5 +1,4 @@
 var _ = require('underscore');
-var wildsCards = require('./sets/theWilds');
 
 module.exports = function(game) {
 	function getCardsFromRoom(card, room) {

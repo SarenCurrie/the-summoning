@@ -36,6 +36,18 @@ module.exports = function(game) {
 				'priestessOfTheSun', 'basilisk', 'ferociousCamel',
 				'sandShaper', 'valhallaRedeemer', 'astralOfTheSun'
 			]
+		},
+		beast: {
+			cards: [
+				'youngHunter', 'youngHunter', 'ambush', 'ambush',
+				'nightStalker', 'nightStalker', 'wildsDruid', 'wildsDruid',
+				'plainsEagle', 'plainsEagle', 'huntsmaster', 'huntsmaster',
+				'wolfBorther', 'wolfBorther', 'tundraStalker', 'tundraStalker',
+				'carrionCrow', 'carrionCrow', 'loneHunter', 'loneHunter',
+				'savageBear', 'savageBear', 'hawkScout', 'hawkScout',
+				'packOutcast', 'packOutcast', 'alphaWolf', 'alphaWolf',
+				'nightScrouge', 'nightScrouge'
+			]
 		}
 	};
 

@@ -1378,7 +1378,10 @@ module.exports = function(game) {
 		}
 	};
 
-	_.extend(cards, wildsCards);
+	cards = _.extend(cards, wildsCards());
+
+	console.log('CARDS AVAILABLE');
+	console.log(cards);
 
 	return cards;
 };

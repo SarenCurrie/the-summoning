@@ -115,8 +115,13 @@ var createGame = function(io, room) {
 
 		//this is kind of a patchy fix for players also being minions. TODO!
 		var decksToLoad = decks();
-		var sacDeck = decksToLoad.sacrifice;
-		var shuffledDeck = _.shuffle(sacDeck.cards);
+		var playersDeck;
+		if (!player1) {
+			var playersDeck = decksToLoad.sacrifice;
+		} else {
+			var playersDeck = decksToLoad.beast;
+		}
+		var shuffledDeck = _.shuffle(playersDeck.cards);
 		for (var i = 0; i < 30; i++) {
 			var nextCard = cardSet[shuffledDeck[i]];
 			var cardId = uuid.v4();
