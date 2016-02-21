@@ -1,7 +1,8 @@
 var _ = require('underscore');
+var uuid = require('node-uuid');
+var chat = require('./chat');
 var id = require('./util/idHandler');
 var cards = require('./gamedata/cards');
-var uuid = require('node-uuid');
 var decks = require('./gamedata/decks');
 
 var createGame = function(io, room) {
@@ -22,6 +23,10 @@ var createGame = function(io, room) {
 
 	game.on('connection', function(socket) {
 		var sId = id(socket.id);
+
+		var gameChat = chat(socket, game);
+		gameChat.playerMessage('Welcome to room: ' + room.roomName);
+		gameChat.allMessage(sId + ' joined the game.')
 
 		console.log(sId + ' joined ' + room.roomName);
 
@@ -122,9 +127,9 @@ var createGame = function(io, room) {
 				room.players[sId].mullcards[i] = room.players[sId].deck[i].id;
 			}
 		}
-		console.log('printing deck!');
-		console.log(room.players[sId].deck);
-		console.log(_.size(room.players[sId].deck));
+		// console.log('printing deck!');
+		// console.log(room.players[sId].deck);
+		// console.log(_.size(room.players[sId].deck));
 
 		if (!player1) {
 			player1 = sId;
